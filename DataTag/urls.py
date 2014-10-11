@@ -10,3 +10,7 @@ from django.core.urlresolvers import reverse_lazy
 urlpatterns = patterns('DataTag.views.main',
     url(r'^$', 'index', name='index'),
 )
+
+urlpatterns += patterns('DataTag.views.media',
+    url(r'^media/(?P<path>.*$)', 'media', name='media'),
+)

@@ -16,8 +16,12 @@ class Media(models.Model):
         tags_str = ', '.join([tag.name for tag in self.tags.all()])
         return "%s: %s" % (self.path[base_length+1:], tags_str)
 
+    def url(self):
+        return "/media%s" % (self.path[len(settings.MEDIA_ROOT):])
+
 
 class Tag(models.Model):
+    # TODO: name should be unique !
     name = models.CharField(max_length=128)
     parent = models.ForeignKey('self', blank=True, null=True,
                                related_name='children')

@@ -13,7 +13,6 @@ import os
 import yaml
 
 
-
 class Command(BaseCommand):
     args = None
     help = 'Synchronize the file system with the database'
@@ -28,7 +27,7 @@ class Command(BaseCommand):
         tags_f = open(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'), 'r')
         tags_y = yaml.load(tags_f)
         for tag_name in tags_y.keys():
-            print(" - %s"  % (tag_name))
+            print(" - %s" % (tag_name))
             Tag(name=tag_name).save()
 
         print("Adding the tag relationship")

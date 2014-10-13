@@ -1,0 +1,13 @@
+<html>
+<head>
+    <title>{{ tag.name }}</title>
+</head>
+<body>
+{% for tag in tag.children.all %}
+<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+{% endfor %}
+{% for media in tag.media_set.all %}
+<img src="{{ media.get_absolute_url }}?size=small" />
+{% endfor %}
+</body>
+</html>

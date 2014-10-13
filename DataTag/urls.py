@@ -16,5 +16,5 @@ urlpatterns += patterns('DataTag.views.media',
 )
 
 urlpatterns += patterns('DataTag.views.tag',
-    url(r'^tag/(?P<tags>.*$)', 'tag', name='tag'),
+    url(r'^tag/(?P<tags>.*)/$', 'tag', name='tag'),
 )

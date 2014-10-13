@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.db import models
 
 
@@ -16,7 +17,7 @@ class Media(models.Model):
         tags_str = ', '.join([tag.name for tag in self.tags.all()])
         return "%s: %s" % (self.path[base_length+1:], tags_str)
 
-    def url(self):
+    def get_absolute_url(self):
         return "/media%s" % (self.path[len(settings.MEDIA_ROOT):])
 
 
@@ -37,3 +38,14 @@ class Tag(models.Model):
             return "%s (%s)" % (self.name, self.parent.name)
         else:
             return "%s" % (self.name)
+
+    def parents(self):
+        tag = self
+        taglist = list()
+        while tag:
+            taglist.insert(0, tag.name)
+            tag = tag.parent
+        return taglist
+
+    def get_absolute_url(self):
+        return reverse('tag', args=['/'.join(self.parents())])

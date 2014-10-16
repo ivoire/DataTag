@@ -33,11 +33,16 @@ def media(request, path):
 
             # Create the thumbnail, copying the EXIF data
             image = Image.open(pathname)
-            # TODO: what if there is no EXIF data?
+            # TODO: what about some rotations?
+            # FIXME: the EXIF is now wrong (wrong size)
             # http://stackoverflow.com/questions/4228530/pil-thumbnail-is-rotating-my-image
-            exif = image.info['exif']
+            exif = image.info.get('exif', None)
             image.thumbnail((200,200), Image.ANTIALIAS)
-            image.save(smallpath, exif=exif)
+            if exif:
+                image.save(smallpath, exif=exif)
+            else:
+                image.save(smallpath)
+
         pathname = smallpath
 
     # Stream the file

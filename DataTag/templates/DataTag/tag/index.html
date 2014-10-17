@@ -4,11 +4,11 @@
 
 {% block breadcrumb %}
 <li><a href="{% url 'tag.root' %}">Tags</a></li>
-{% for name in tag.parents %}
+{% for ptag in tag.parents %}
   {% if forloop.last %}
-    <li class="activate">{{ name }}</li>
+    <li class="activate">{{ ptag.name }}</li>
   {% else %}
-    <li><a href="??">{{ name }}</a></li>
+    <li><a href="{{ ptag.get_absolute_url }}">{{ ptag.name }}</a></li>
   {% endif %}
 {% endfor %}
 {% endblock %}

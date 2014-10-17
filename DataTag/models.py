@@ -43,9 +43,9 @@ class Tag(models.Model):
         tag = self
         taglist = list()
         while tag:
-            taglist.insert(0, tag.name)
+            taglist.insert(0, tag)
             tag = tag.parent
         return taglist
 
     def get_absolute_url(self):
-        return reverse('tag', args=['/'.join(self.parents())])
+        return reverse('tag', args=['/'.join([t.name for t in self.parents()])])

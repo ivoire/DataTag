@@ -3,7 +3,7 @@
 {% block title %}{{ tag.name }}{% endblock %}
 
 {% block style %}
-  .thumbnail {
+  .thumbnail.directory {
     min-height: 200px;
     min-width: 200px;
 {% endblock %}
@@ -23,13 +23,17 @@
 <div class="row">
   {% for tag in tag.children.all %}
   <div class="col-xs-3 col-md-3">
-    <a href="{{ tag.get_absolute_url }}" class="thumbnail" data-src="holder.js/200x200">{{ tag.name }}</a>
+    <a href="{{ tag.get_absolute_url }}" class="thumbnail directory">{{ tag.name }}</a>
   </div>
   {% endfor %}
 </div>
 
 <div class="row">
-  {% for media in tag.media_set.all %}
+{% for media in tag.media_set.all %}
+  {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
+</div>
+<div class="row">
+  {% endif %}
   <div class="col-xs-3 col-md-3">
     <a href="{{ media.get_absolute_url }}" class="thumbnail"><img src="{{ media.get_absolute_url }}?size=small" /></a>
   </div>

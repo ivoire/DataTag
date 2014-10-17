@@ -1,13 +1,23 @@
-<html>
-<head>
-    <title>{{ tag.name }}</title>
-</head>
-<body>
+{% extends 'DataTag/base.html' %}
+
+{% block title %}{{ tag.name }}{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="{% url 'tag.root' %}">Tags</a></li>
+{% for name in tag.parents %}
+  {% if forloop.last %}
+    <li class="activate">{{ name }}</li>
+  {% else %}
+    <li><a href="??">{{ name }}</a></li>
+  {% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block body %}
 {% for tag in tag.children.all %}
 <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
 {% endfor %}
 {% for media in tag.media_set.all %}
 <a href="{{ media.get_absolute_url }}"><img src="{{ media.get_absolute_url }}?size=small" /></a>
 {% endfor %}
-</body>
-</html>
+{% endblock %}

@@ -2,6 +2,12 @@
 
 {% block title %}{{ tag.name }}{% endblock %}
 
+{% block style %}
+  .thumbnail {
+    min-height: 200px;
+    min-width: 200px;
+{% endblock %}
+
 {% block breadcrumb %}
 <li><a href="{% url 'tag.root' %}">Tags</a></li>
 {% for ptag in tag.parents %}
@@ -14,10 +20,19 @@
 {% endblock %}
 
 {% block body %}
-{% for tag in tag.children.all %}
-<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+<div class="row">
+  {% for tag in tag.children.all %}
+  <div class="col-xs-3 col-md-3">
+    <a href="{{ tag.get_absolute_url }}" class="thumbnail" data-src="holder.js/200x200">{{ tag.name }}</a>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="row">
+  {% for media in tag.media_set.all %}
+  <div class="col-xs-3 col-md-3">
+    <a href="{{ media.get_absolute_url }}" class="thumbnail"><img src="{{ media.get_absolute_url }}?size=small" /></a>
+  </div>
 {% endfor %}
-{% for media in tag.media_set.all %}
-<a href="{{ media.get_absolute_url }}"><img src="{{ media.get_absolute_url }}?size=small" /></a>
-{% endfor %}
+</div>
 {% endblock %}

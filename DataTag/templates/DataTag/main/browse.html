@@ -1,0 +1,34 @@
+{% extends 'DataTag/base.html' %}
+
+{% block title %}{{ tag.name }}{% endblock %}
+
+{% block style %}
+  .thumbnail.directory {
+    min-height: 200px;
+    min-width: 200px;
+{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="{% url 'index' %}">Tag Browser</a></li>
+{% for ptag in tag.parents %}
+  {% if forloop.last %}
+    <li class="activate">{{ ptag.name }}</li>
+  {% else %}
+    <li><a href="{{ ptag.get_browse_url }}">{{ ptag.name }}</a></li>
+  {% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block body %}
+<div class="row">
+  {% for tag in tag.children.all %}
+  <div class="col-xs-3 col-md-3">
+    {% if tag.is_leaf %}
+      <a href="{{ tag.get_absolute_url }}" class="thumbnail directory">{{ tag.name }}</a>
+    {% else %}
+      <a href="{{ tag.get_browse_url }}" class="thumbnail directory">{{ tag.name }}</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

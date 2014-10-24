@@ -7,15 +7,16 @@ from django.conf.urls import include, patterns, url
 from django.core.urlresolvers import reverse_lazy
 
 
-urlpatterns = patterns('DataTag.views.main',
-    url(r'^$', 'index', name='index'),
-)
-
-urlpatterns += patterns('DataTag.views.media',
+urlpatterns = patterns('DataTag.views.media',
     url(r'^medias/(?P<path>.*$)', 'media', name='media'),
 )
 
 urlpatterns += patterns('DataTag.views.tag',
     url(r'^tags/$', 'tag', {'tags': ''}, name='tag.root'),
     url(r'^tags/(?P<tags>.*)/$', 'tag', name='tag'),
+)
+
+urlpatterns += patterns('DataTag.views.main',
+    url(r'^$', 'index', name='index'),
+    url(r'^(?P<path>.*)/$', 'browse', name='browse'),
 )

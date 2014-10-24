@@ -53,3 +53,6 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         return reverse('tag', args=['/'.join([t.name for t in self.parents()])])
+
+    def get_browse_url(self):
+        return reverse('browse', args=['/'.join([t.name for t in self.parents()])])

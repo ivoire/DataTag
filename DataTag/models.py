@@ -47,5 +47,9 @@ class Tag(models.Model):
             tag = tag.parent
         return taglist
 
+    def is_leaf(self):
+        """ True if the Tag does not have children """
+        return self.children.count() == 0
+
     def get_absolute_url(self):
         return reverse('tag', args=['/'.join([t.name for t in self.parents()])])

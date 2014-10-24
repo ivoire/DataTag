@@ -21,14 +21,6 @@
 
 {% block body %}
 <div class="row">
-  {% for tag in tag.children.all %}
-  <div class="col-xs-3 col-md-3">
-    <a href="{{ tag.get_absolute_url }}" class="thumbnail directory">{{ tag.name }}</a>
-  </div>
-  {% endfor %}
-</div>
-
-<div class="row">
 {% for media in tag.media_set.all %}
   {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
 </div>

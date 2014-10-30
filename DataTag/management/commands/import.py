@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from DataTag.models import Media, Tag
+from DataTag.utils import Configuration
 
 import fnmatch
 import os
@@ -24,32 +25,34 @@ class Command(BaseCommand):
         Tag.objects.all().delete()
 
         print("Importing Tags...")
-        tags_f = open(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'), 'r')
-        tags_y = yaml.load(tags_f)
-        for tag_name in tags_y.keys():
-            print(" - %s" % (tag_name))
-            Tag(name=tag_name).save()
+        root_conf = Configuration()
+        root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
-        print("Adding the tag relationship")
-        for tag_name in tags_y.keys():
-            if not tags_y[tag_name]:
-                continue
+        for tag in root_conf.tags:
+            tag_name = tag.name
+            print(" - %s" % (tag.name))
+            Tag(name=tag.name).save()
 
-            tag = Tag.objects.get(name=tag_name)
-            parent_name = tags_y[tag_name].get('parent', None)
-            if parent_name:
-                parent = Tag.objects.get(name=parent_name)
-                tag.parent = parent
-                tag.save()
+        #print("Adding the tag relationship")
+        #for tag_name in tags_y['tags']:
+        #    print tag_name
+        #    if not tag_name.keys()[0]:
+        #        continue
+
+        #    print tag_name
+        #    tag = Tag.objects.get(name=tag_name)
+        #    parent_name = [tag_name].get('parent', None)
+        #    if parent_name:
+        #        parent = Tag.objects.get(name=parent_name)
+        #        tag.parent = parent
+        #        tag.save()
 
         print("Importing the Media")
         for root, dirs, files in os.walk(settings.MEDIA_ROOT, followlinks=True):
             # Parse the local configuration file (if it exists)
+            local_conf = Configuration()
             if '.DataTag.yaml' in files:
-                conf_f = open(os.path.join(root, '.DataTag.yaml'), 'r')
-                conf_y = yaml.load(conf_f)
-            else:
-                conf_y = dict()
+                local_conf.load(os.path.join(root, '.DataTag.yaml'))
 
             # Add all files
             for filename in files:
@@ -59,8 +62,8 @@ class Command(BaseCommand):
                 print path
                 media = Media(path=path)
                 media.save()
-                for key in conf_y.keys():
-                    if fnmatch.fnmatchcase(filename, key):
-                        for tag_name in conf_y[key]['tags']:
+                for media_conf in local_conf.medias:
+                    if fnmatch.fnmatchcase(filename, media_conf.pattern):
+                        for tag_name in media_conf.tags:
                             tag = Tag.objects.get(name=tag_name)
                             media.tags.add(tag)

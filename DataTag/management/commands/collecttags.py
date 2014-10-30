@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
+from DataTag.utils import Configuration, TagConf
 import os
 import yaml
 
@@ -25,30 +26,22 @@ class Command(BaseCommand):
 
             # Parse the local configuration file
             if '.DataTag.yaml' in files:
-                with open(os.path.join(root, '.DataTag.yaml'), 'r') as local_conf:
-                    local_conf = yaml.load(local_conf)
-                    for key in local_conf:
-                        for tag in local_conf[key]['tags']:
-                            used_tags.add(tag)
+                local_conf = Configuration()
+                local_conf.load(os.path.join(root, '.DataTag.yaml'))
+                used_tags.update(local_conf.media_tags())
 
         # Load the tags from the root configuration
-        root_tags = set()
-        try:
-            with open(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'), 'r') as root_conf:
-                root_conf = yaml.load(root_conf)
-                for tag in root_conf:
-                    root_tags.add(tag)
-        except IOError:
-            pass
+        root_conf = Configuration()
+        root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
         # Add the tags that are missing in the root_tags
-        missing_tags = used_tags - root_tags
+        missing_tags = used_tags - root_conf.tag_set()
         if missing_tags:
             print("Adding missing tags")
             print("===================")
-            with open(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'), 'a+') as root_conf:
-                for tag in missing_tags:
-                    print(" - %s" % (tag))
-                    root_conf.write("%s:\n" % (tag))
+            for tag in missing_tags:
+                print(" - %s" % (tag))
+                root_conf.tags.append(TagConf(tag, set()))
+            root_conf.dump(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
         else:
             print("No missing tags")

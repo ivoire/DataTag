@@ -61,7 +61,7 @@ class Configuration:
             medias.append({'pattern': media.pattern, 'tags': media.tags})
         for tag in self.tags:
             if tag.groups:
-                tags.append({'name': tag.name, 'groups': tag.groups})
+                tags.append({'name': tag.name, 'groups': list(tag.groups)})
             else:
                 tags.append({'name': tag.name})
         with open(filename, 'w') as f:

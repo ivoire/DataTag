@@ -1,0 +1,4 @@
+medias:
+    - pattern: '*'
+      tags:
+        - tag_1

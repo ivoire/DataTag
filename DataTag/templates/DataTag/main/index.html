@@ -29,7 +29,7 @@
   {% endif %}
   <div class="col-xs-3 col-md-3">
     <div class="thumbnail">
-      <a href="{{ tag.path }}"><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
+      <a href="/{{ tag.path }}"><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
       <div class="caption">{{ tag.obj.name|truncatechars:25 }}
         <div class="pull-right">
           <a href="{% url 'tags.details' tag.path %}"><span class="badge">{{ tag.count }} <span class="glyphicon glyphicon-eye-open"></span></span></a>

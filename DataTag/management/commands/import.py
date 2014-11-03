@@ -33,20 +33,6 @@ class Command(BaseCommand):
             print(" - %s" % (tag.name))
             Tag(name=tag.name).save()
 
-        #print("Adding the tag relationship")
-        #for tag_name in tags_y['tags']:
-        #    print tag_name
-        #    if not tag_name.keys()[0]:
-        #        continue
-
-        #    print tag_name
-        #    tag = Tag.objects.get(name=tag_name)
-        #    parent_name = [tag_name].get('parent', None)
-        #    if parent_name:
-        #        parent = Tag.objects.get(name=parent_name)
-        #        tag.parent = parent
-        #        tag.save()
-
         print("Importing the Media")
         for root, dirs, files in os.walk(settings.MEDIA_ROOT, followlinks=True):
             # Parse the local configuration file (if it exists)

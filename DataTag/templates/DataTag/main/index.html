@@ -9,18 +9,14 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<li class="activate">Tag Browser</li>
+<li>Home</a></li>
 {% endblock %}
 
 {% block body %}
 <div class="row">
-  {% for tag in children %}
+  {% for tag in tags %}
   <div class="col-xs-3 col-md-3">
-    {% if tag.is_leaf %}
-      <a href="{{ tag.get_absolute_url }}" class="thumbnail directory">{{ tag.name }}</a>
-    {% else %}
-      <a href="{{ tag.get_browse_url }}" class="thumbnail directory">{{ tag.name }}</a>
-    {% endif %}
+    <a href="{{ tag.get_browse_url }}" class="thumbnail directory">{{ tag.name }}</a>
   </div>
   {% endfor %}
 </div>

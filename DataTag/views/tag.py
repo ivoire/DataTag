@@ -6,17 +6,21 @@ from __future__ import unicode_literals
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
-from DataTag.models import Tag
+from DataTag.models import Media, Tag
 
 
-def tag(request, tags):
+def tag(request, path):
     # TODO: check the permissions
-    # Check the existence of the tags. Also check the parent relationship
-    previous = None
-    tag = None
-    for tagname in tags.split('/'):
-        tag = get_object_or_404(Tag, name=tagname, parent=tag)
-        previous = tagname
+    # TODO: handle OR
+    # Check the existence of all tags
+    tags = []
+    medias = Media.objects.all()
+    query_string = ''
+    for tag_name in [p for p in path.split('/') if p]:
+        query_string = query_string + '/' + tag_name
+        tag = get_object_or_404(Tag, name=tag_name)
+        medias = medias.filter(tags=tag)
+        tags.append({'obj': tag, 'path': query_string[1:]})
 
-    return render_to_response('DataTag/tag/index.html', {'tag': tag},
+    return render_to_response('DataTag/tag/index.html', {'medias': medias, 'tags': tags},
                               context_instance=RequestContext(request))

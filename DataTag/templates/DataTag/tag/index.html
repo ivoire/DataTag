@@ -1,6 +1,6 @@
 {% extends 'DataTag/base.html' %}
 
-{% block title %}{{ tag.name }}{% endblock %}
+{% block title %}/{% with tags|last as last_tag %}{{ last_tag.path }}{% endwith %}{% endblock %}
 
 {% block style %}
   .thumbnail.directory {
@@ -9,19 +9,20 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<li><a href="{% url 'tag.root' %}">Tags</a></li>
-{% for ptag in tag.parents %}
+<li><a href="{% url 'index' %}">Home</a></li>
+<li><a href="{% url 'tags.root' %}">All tags</a></li>
+{% for tag in tags %}
   {% if forloop.last %}
-    <li class="activate">{{ ptag.name }}</li>
+    <li class="activate">{{ tag.obj.name }}</li>
   {% else %}
-    <li><a href="{{ ptag.get_absolute_url }}">{{ ptag.name }}</a></li>
+    <li><a href="{% url 'tags.details' tag.path %}">{{ tag.obj.name }}</a></li>
   {% endif %}
 {% endfor %}
 {% endblock %}
 
 {% block body %}
 <div class="row">
-{% for media in tag.media_set.all %}
+{% for media in medias %}
   {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
 </div>
 <div class="row">

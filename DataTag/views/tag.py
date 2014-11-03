@@ -16,7 +16,7 @@ def browse(request, path):
     for tag_name in [p for p in path.split('/') if p]:
         query_string = query_string + '/' + tag_name
         tag = get_object_or_404(Tag, name=tag_name)
-        tags.append({'obj': tag, 'path': query_string})
+        tags.append({'obj': tag, 'path': query_string[1:]})
         medias = medias.filter(tags=tag)
 
     sub_tags = []
@@ -25,7 +25,7 @@ def browse(request, path):
         count = local_medias.count()
         if count:
             sub_tags.append({'obj': tag, 'count': count,
-                             'path': query_string + '/' + tag.name,
+                             'path': (query_string + '/' + tag.name)[1:],
                              'thumbnail': local_medias.order_by('?')[0]})
 
     return render_to_response('DataTag/tag/browse.html', {'tags': tags,

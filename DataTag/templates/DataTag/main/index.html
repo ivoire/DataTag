@@ -6,6 +6,14 @@
   .thumbnail.directory {
     min-height: 200px;
     min-width: 200px;
+  }
+  .caption {
+    background: none repeat scroll 0 0 #dddddd;
+    opacity: 0.5;
+    margin: 0 auto;
+    margin-top: 0px;
+    text-align: left;
+  }
 {% endblock %}
 
 {% block breadcrumb %}
@@ -20,7 +28,14 @@
 <div class="row">
   {% endif %}
   <div class="col-xs-3 col-md-3">
-    <a href="{{ tag.obj.get_browse_url }}" class="thumbnail directory"><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" />{{ tag.obj.name }}</a>
+    <div class="thumbnail">
+      <a href="{{ tag.path }}"><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
+      <div class="caption">{{ tag.obj.name }}
+        <div class="pull-right">
+          <a href="{% url 'tags.details' tag.path %}"><span class="badge">{{ tag.count }} <span class="glyphicon glyphicon-eye-open"></span></span></a>
+        </div>
+      </div>
+    </div>
   </div>
   {% endfor %}
 </div>

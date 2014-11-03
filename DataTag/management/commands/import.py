@@ -28,10 +28,13 @@ class Command(BaseCommand):
         root_conf = Configuration()
         root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
+        tags = {}
         for tag in root_conf.tags:
             tag_name = tag.name
             print(" - %s" % (tag.name))
-            Tag(name=tag.name).save()
+            tag = Tag(name=tag.name)
+            tag.save()
+            tags[tag_name] = tag
 
         print("Importing the Media")
         for root, dirs, files in os.walk(settings.MEDIA_ROOT, followlinks=True):
@@ -51,5 +54,4 @@ class Command(BaseCommand):
                 for media_conf in local_conf.medias:
                     if fnmatch.fnmatchcase(filename, media_conf.pattern):
                         for tag_name in media_conf.tags:
-                            tag = Tag.objects.get(name=tag_name)
-                            media.tags.add(tag)
+                            media.tags.add(tags[tag_name])

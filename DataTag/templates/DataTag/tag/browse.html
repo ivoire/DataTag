@@ -22,8 +22,12 @@
 {% block body %}
 <div class="row">
   {% for tag in sub_tags %}
+  {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
+</div>
+<div class="row">
+  {% endif %}
   <div class="col-xs-3 col-md-3">
-    <a href="{{ tag.path }}" class="thumbnail directory">{{ tag.obj.name }}</a>
+    <a href="{{ tag.path }}" class="thumbnail directory"><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" />{{ tag.obj.name }}</a>
   </div>
   {% endfor %}
 </div>

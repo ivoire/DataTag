@@ -10,5 +10,10 @@ from DataTag.models import Media, Tag
 
 
 def index(request):
-    return render_to_response('DataTag/main/index.html', {'tags': Tag.objects.all()},
+    tags = []
+    for tag in Tag.objects.all():
+        medias = Media.objects.filter(tags=tag)
+        if medias.exists():
+            tags.append({'obj': tag, 'thumbnail': medias.order_by('?')[0]})
+    return render_to_response('DataTag/main/index.html', {'tags': tags},
                               context_instance=RequestContext(request))

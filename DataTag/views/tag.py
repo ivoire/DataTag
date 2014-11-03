@@ -21,10 +21,12 @@ def browse(request, path):
 
     sub_tags = []
     for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]):
-        count = medias.filter(tags=tag).count()
+        local_medias = medias.filter(tags=tag)
+        count = local_medias.count()
         if count:
             sub_tags.append({'obj': tag, 'count': count,
-                             'path': query_string + '/' + tag.name})
+                             'path': query_string + '/' + tag.name,
+                             'thumbnail': local_medias.order_by('?')[0]})
 
     return render_to_response('DataTag/tag/browse.html', {'tags': tags,
                                                           'sub_tags': sub_tags},

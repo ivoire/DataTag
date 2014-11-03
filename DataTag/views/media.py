@@ -28,7 +28,7 @@ def media(request, path):
     if size == 'small':
         smallpath = os.path.join(settings.CACHE_ROOT, 'small', path)
         if not os.path.isfile(smallpath):
-        # Create the destination directory
+            # Create the destination directory
             mkdir(os.path.dirname(smallpath))
 
             # Create the thumbnail, copying the EXIF data
@@ -37,7 +37,7 @@ def media(request, path):
             # FIXME: the EXIF is now wrong (wrong size)
             # http://stackoverflow.com/questions/4228530/pil-thumbnail-is-rotating-my-image
             exif = image.info.get('exif', None)
-            image.thumbnail((200,200), Image.ANTIALIAS)
+            image.thumbnail((200, 200), Image.ANTIALIAS)
             if exif:
                 image.save(smallpath, exif=exif)
             else:

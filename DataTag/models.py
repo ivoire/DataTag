@@ -18,7 +18,8 @@ class Media(models.Model):
         return "%s: %s" % (self.path[base_length+1:], tags_str)
 
     def get_absolute_url(self):
-        return reverse('media', args=[self.path[len(settings.MEDIA_ROOT) + 1:]])
+        base_length = len(settings.MEDIA_ROOT)
+        return reverse('media', args=[self.path[base_length+1:]])
 
 
 class Tag(models.Model):

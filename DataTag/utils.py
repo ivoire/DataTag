@@ -38,9 +38,11 @@ class Configuration:
             with open(filename, 'r') as f:
                 y = yaml.load(f)
                 for media in y.get('medias', []):
-                    self.medias.append(MediaConf(media['pattern'], media['tags']))
+                    self.medias.append(MediaConf(media['pattern'],
+                                                 media['tags']))
                 for tag in y.get('tags', []):
-                    self.tags.append(TagConf(tag['name'], set(tag.get('groups', []))))
+                    self.tags.append(TagConf(tag['name'], set(tag.get('groups',
+                                             []))))
         except IOError:
             pass
 

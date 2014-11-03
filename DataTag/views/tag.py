@@ -28,8 +28,8 @@ def browse(request, path):
                              'path': (query_string + '/' + tag.name)[1:],
                              'thumbnail': local_medias.order_by('?')[0]})
 
-    return render_to_response('DataTag/tag/browse.html', {'tags': tags,
-                                                          'sub_tags': sub_tags},
+    return render_to_response('DataTag/tag/browse.html',
+                              {'tags': tags, 'sub_tags': sub_tags},
                               context_instance=RequestContext(request))
 
 
@@ -46,5 +46,6 @@ def tag(request, path):
         medias = medias.filter(tags=tag)
         tags.append({'obj': tag, 'path': query_string[1:]})
 
-    return render_to_response('DataTag/tag/index.html', {'medias': medias, 'tags': tags},
+    return render_to_response('DataTag/tag/index.html',
+                              {'medias': medias, 'tags': tags},
                               context_instance=RequestContext(request))

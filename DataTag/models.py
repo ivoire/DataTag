@@ -31,7 +31,7 @@ class Tag(models.Model):
         return "%s" % (self.name)
 
     def get_absolute_url(self):
-        return reverse('tag', args=[self.name])
+        return reverse('tags.details', args=[self.name])
 
     def get_browse_url(self):
-        return reverse('browse', args=[self.name])
+        return reverse('tags.browse', args=[self.name])

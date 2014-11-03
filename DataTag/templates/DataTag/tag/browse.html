@@ -1,6 +1,6 @@
 {% extends 'DataTag/base.html' %}
 
-{% block title %}{{ tag.name }}{% endblock %}
+{% block title %}/{% with tags|last as last_tag %}{{ last_tag.path }}{% endwith %}{% endblock %}
 
 {% block style %}
   .thumbnail.directory {

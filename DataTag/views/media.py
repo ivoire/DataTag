@@ -46,7 +46,7 @@ def media(request, path):
         pathname = smallpath
 
     # Stream the file
-    wrapper = FileWrapper(open(pathname))
+    wrapper = FileWrapper(open(pathname, 'rb'))
     mime = mimetypes.guess_type(pathname)
     response = StreamingHttpResponse(wrapper,
                                      content_type=mime[0] if mime[0]

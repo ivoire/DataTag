@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 
 from django.core.servers.basehttp import FileWrapper
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 
@@ -48,7 +48,8 @@ def media(request, path):
     # Stream the file
     wrapper = FileWrapper(open(pathname))
     mime = mimetypes.guess_type(pathname)
-    response = HttpResponse(wrapper,
-                            content_type=mime[0] if mime[0] else 'text/plain')
+    response = StreamingHttpResponse(wrapper,
+                                     content_type=mime[0] if mime[0]
+                                     else 'text/plain')
     response['Content-Length'] = os.path.getsize(pathname)
     return response

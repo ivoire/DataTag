@@ -5,8 +5,10 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
 
+@python_2_unicode_compatible
 class Media(models.Model):
     tags = models.ManyToManyField('Tag', blank=True, null=True)
     path = models.FilePathField(path=settings.MEDIA_ROOT, recursive=True,
@@ -22,6 +24,7 @@ class Media(models.Model):
         return reverse('media', args=[self.path[base_length+1:]])
 
 
+@python_2_unicode_compatible
 class Tag(models.Model):
     # TODO: name should be unique !
     name = models.CharField(max_length=128)

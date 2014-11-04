@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # vim: set ts=4
 
+from __future__ import unicode_literals
+
 import errno
 import os
 import yaml

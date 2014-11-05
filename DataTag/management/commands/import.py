@@ -49,7 +49,7 @@ class Command(BaseCommand):
                 if filename == '.DataTag.yaml':
                     continue
                 path = os.path.join(root, filename)
-                print path
+                print(path)
                 media = Media(path=path)
                 media.save()
                 for media_conf in local_conf.medias:

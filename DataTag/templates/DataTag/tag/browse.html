@@ -22,7 +22,7 @@
   {% if forloop.last %}
     <li class="activate">{{ tag.obj.name }}</li>
   {% else %}
-    <li><a href="{{ tag.path }}">{{ tag.obj.name }}</a></li>
+    <li><a href="/{{ tag.path }}">{{ tag.obj.name }}</a></li>
   {% endif %}
 {% endfor %}
 {% endblock %}

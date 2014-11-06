@@ -10,7 +10,7 @@
 
 {% block breadcrumb %}
 <li><a href="{% url 'index' %}">Home</a></li>
-<li><a href="{% url 'tags.root' %}">All tags</a></li>
+<li><a href="{% url 'tags.root' %}">All</a></li>
 {% for tag in tags %}
   {% if forloop.last %}
     <li class="activate">{{ tag.obj.name }}</li>

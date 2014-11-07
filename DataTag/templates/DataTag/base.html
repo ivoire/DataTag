@@ -33,6 +33,7 @@
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li class="{% block nav-index %}{% endblock %}"><a href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span> {% trans "Home" %}</a></li>
+        <li class="{% block nav-browse %}{% endblock %}"><a href="{% url 'tags.browse.root' %}"><span class="glyphicon glyphicon-tags"></span> {% trans "Browse" %}</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}

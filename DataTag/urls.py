@@ -31,8 +31,8 @@ urlpatterns += patterns('DataTag.views.media',
 
 # Tags
 urlpatterns += patterns('DataTag.views.tag',
-    url(r'^tags/$', 'tag', {'path': ''}, name='tags.root'),
-    url(r'^tags(?P<path>/.*)/$', 'tag', name='tags.details'),
+    url(r'^tags/$', 'details', {'path': ''}, name='tags.root'),
+    url(r'^tags(?P<path>/.*)/$', 'details', name='tags.details'),
     url(r'^browse/$', 'browse', {'path': ''}, name='tags.browse.root'),
     url(r'^browse(?P<path>/.*)/$', 'browse', name='tags.browse'),
 )

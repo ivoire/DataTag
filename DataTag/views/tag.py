@@ -34,7 +34,7 @@ def browse(request, path):
                               context_instance=RequestContext(request))
 
 
-def tag(request, path):
+def details(request, path):
     # TODO: check the permissions
     # TODO: handle OR
     # Check the existence of all tags
@@ -47,6 +47,6 @@ def tag(request, path):
         medias = medias.filter(tags=tag)
         tags.append({'obj': tag, 'path': query_string})
 
-    return render_to_response('DataTag/tag/index.html',
+    return render_to_response('DataTag/tag/details.html',
                               {'medias': medias, 'tags': tags},
                               context_instance=RequestContext(request))

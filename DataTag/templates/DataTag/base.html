@@ -41,11 +41,11 @@
           <ul class="dropdown-menu">
             <li><a href=""><span class="glyphicon glyphicon-cog"></span> {% trans "Profile" %}</a></li>
             <li class="divider"></li>
-            <li><a href=""><span class="glyphicon glyphicon-off"></span> {% trans "Log out" %}</a></li>
+            <li><a href="{% url 'accounts.logout' %}"><span class="glyphicon glyphicon-off"></span> {% trans "Log out" %}</a></li>
           </ul>
         </li>
         {% else %}
-        <li class="{% block nav-login %}{% endblock %}"><a href=""><span class="glyphicon glyphicon-user"></span> {% trans "Log in" %}</a></li>
+        <li class="{% block nav-login %}{% endblock %}"><a href="{% url 'accounts.login' %}"><span class="glyphicon glyphicon-user"></span> {% trans "Log in" %}</a></li>
         {% endif %}
       </ul>
     </nav>

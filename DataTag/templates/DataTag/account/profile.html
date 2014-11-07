@@ -1,0 +1,17 @@
+{% extends 'DataTag/base.html' %}
+{% load i18n %}
+
+{% block title %}Profile{% endblock %}
+
+{% block nav-account %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+  <li class="active">{% trans "Account" %}</li>
+{% endblock %}
+
+{% block body %}
+<div class="page-header">
+  <h2>{% trans "My profile" %}</h2>
+</div>
+{% endblock %}

@@ -3,7 +3,10 @@
 
 from __future__ import unicode_literals
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 
@@ -21,3 +24,9 @@ class DTAuthenticationForm(AuthenticationForm):
 
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['class'] = 'form-control'
+
+
+@login_required
+def profile(request):
+    return render_to_response('DataTag/account/profile.html',
+                              context_instance=RequestContext(request))

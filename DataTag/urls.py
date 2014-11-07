@@ -19,6 +19,11 @@ urlpatterns += patterns('django.contrib.auth.views',
     url(r'^accounts/logout/$', 'logout', {'template_name': 'DataTag/account/logged_out.html'}, name='accounts.logout'),
 )
 
+# Account
+urlpatterns += patterns('DataTag.views.account',
+    url(r'^accounts/profile/$', 'profile', name='accounts.profile'),
+)
+
 # Medias
 urlpatterns += patterns('DataTag.views.media',
     url(r'^medias/(?P<path>.*$)', 'media', name='media'),

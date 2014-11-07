@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 from django.conf.urls import include, patterns, url
 from django.core.urlresolvers import reverse_lazy
 
+from DataTag.views.account import DTAuthenticationForm
 
 # Main view
 urlpatterns = patterns('DataTag.views.main',
@@ -14,7 +15,7 @@ urlpatterns = patterns('DataTag.views.main',
 
 # Authentication
 urlpatterns += patterns('django.contrib.auth.views',
-    url(r'^accounts/login/$', 'login', {'template_name': 'DataTag/account/login.html'}, name='accounts.login'),
+    url(r'^accounts/login/$', 'login', {'template_name': 'DataTag/account/login.html', 'authentication_form': DTAuthenticationForm}, name='accounts.login'),
     url(r'^accounts/logout/$', 'logout', {'template_name': 'DataTag/account/logged_out.html'}, name='accounts.logout'),
 )
 

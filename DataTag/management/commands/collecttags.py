@@ -42,7 +42,7 @@ class Command(BaseCommand):
             print("===================")
             for tag in missing_tags:
                 print(" - %s" % (tag))
-                root_conf.tags.append(TagConf(tag, set()))
+                root_conf.tags.append(TagConf(tag, set(), False))
             root_conf.dump(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
         else:
             print("No missing tags")

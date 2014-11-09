@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 
 from DataTag.models import Media, Tag
@@ -29,12 +30,16 @@ class Command(BaseCommand):
         root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
         tags = {}
-        for tag in root_conf.tags:
-            tag_name = tag.name
-            print(" - %s" % (tag.name))
-            tag = Tag(name=tag.name)
+        for tag_conf in root_conf.tags:
+            print(" - %s" % (tag_conf.name))
+            tag = Tag(name=tag_conf.name, is_public=tag_conf.public)
             tag.save()
-            tags[tag_name] = tag
+            # Add groups
+            for group in tag_conf.groups:
+                print("   - %s" % (group))
+                tag.groups.add(Group.objects.get(name=group))
+
+            tags[tag_conf.name] = tag
 
         print("Importing the Media")
         for root, dirs, files in os.walk(settings.MEDIA_ROOT,

@@ -3,3 +3,4 @@ tags:
 - name: tag_2
   groups:
   - group_1
+  public: true

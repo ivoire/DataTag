@@ -25,9 +25,10 @@ class MediaConf(object):
 
 
 class TagConf(object):
-    def __init__(self, name, groups):
+    def __init__(self, name, groups, public):
         self.name = name
         self.groups = groups
+        self.public = public
 
 
 class Configuration:
@@ -43,8 +44,9 @@ class Configuration:
                     self.medias.append(MediaConf(media['pattern'],
                                                  media['tags']))
                 for tag in y.get('tags', []):
-                    self.tags.append(TagConf(tag['name'], set(tag.get('groups',
-                                             []))))
+                    self.tags.append(TagConf(tag['name'],
+                                             set(tag.get('groups', [])),
+                                             tag.get('public', False)))
         except IOError:
             pass
 
@@ -64,10 +66,12 @@ class Configuration:
         for media in self.medias:
             medias.append({'pattern': media.pattern, 'tags': media.tags})
         for tag in self.tags:
+            t = {'name': tag.name}
             if tag.groups:
-                tags.append({'name': tag.name, 'groups': list(tag.groups)})
-            else:
-                tags.append({'name': tag.name})
+                t['groups'] = list(tag.groups)
+            if tag.public:
+                t['public'] = True
+            tags.append(t)
         with open(filename, 'w') as f:
             yaml.dump({'media': medias,
                        'tags': tags}, f,

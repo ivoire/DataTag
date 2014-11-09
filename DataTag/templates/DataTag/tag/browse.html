@@ -1,6 +1,6 @@
 {% extends 'DataTag/base.html' %}
 
-{% block title %}{% with tags|last as last_tag %}{{ last_tag.path }}{% endwith %}{% endblock %}
+{% block title %}{% with tags|last as last_tag %}{{ last_tag.path|default:"/" }}{% endwith %}{% endblock %}
 
 {% block nav-browse %}active{% endblock %}
 

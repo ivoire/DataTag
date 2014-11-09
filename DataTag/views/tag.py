@@ -26,7 +26,6 @@ def browse(request, path):
     sub_tags = []
     for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]):
         if not tag.is_visible_to(request.user):
-            print ("not visible")
             continue
         local_medias = medias.filter(tags=tag)
         count = local_medias.count()

@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
@@ -10,18 +11,23 @@ from DataTag.models import Media, Tag
 
 
 def browse(request, path):
-    print(path)
+    # Parse the 'path' and build the query
     medias = Media.objects.all()
     query_string = ''
     tags = []
     for tag_name in [p for p in path.split('/') if p]:
         query_string = query_string + '/' + tag_name
         tag = get_object_or_404(Tag, name=tag_name)
+        if not tag.is_visible_to(request.user):
+            return HttpResponseForbidden()
         tags.append({'obj': tag, 'path': query_string})
         medias = medias.filter(tags=tag)
 
     sub_tags = []
     for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]):
+        if not tag.is_visible_to(request.user):
+            print ("not visible")
+            continue
         local_medias = medias.filter(tags=tag)
         count = local_medias.count()
         if count:
@@ -35,8 +41,8 @@ def browse(request, path):
 
 
 def details(request, path):
-    # TODO: check the permissions
     # TODO: handle OR
+    # TODO: For path='' remove invisible medias
     # Check the existence of all tags
     tags = []
     medias = Media.objects.all()
@@ -44,6 +50,8 @@ def details(request, path):
     for tag_name in [p for p in path.split('/') if p]:
         query_string = query_string + '/' + tag_name
         tag = get_object_or_404(Tag, name=tag_name)
+        if not tag.is_visible_to(request.user):
+            return HttpResponseForbidden()
         medias = medias.filter(tags=tag)
         tags.append({'obj': tag, 'path': query_string})
 

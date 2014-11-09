@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 
 from django.core.servers.basehttp import FileWrapper
 from django.conf import settings
-from django.http import StreamingHttpResponse
+from django.http import HttpResponseForbidden, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 
@@ -21,7 +21,8 @@ def media(request, path):
     pathname = os.path.join(settings.MEDIA_ROOT, path)
     # Get the Media and check the permissions
     media = get_object_or_404(Media, path=pathname)
-    # TODO: check the permissions
+    if not media.is_visible_to(request.user):
+        return HttpResponseForbidden()
 
     # Get a thumbnails if requested
     size = request.GET.get('size', None)

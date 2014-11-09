@@ -23,6 +23,30 @@ class Media(models.Model):
         base_length = len(settings.MEDIA_ROOT)
         return reverse('media', args=[self.path[base_length+1:]])
 
+    def is_visible_to(self, user):
+        """
+        Return true if this medias is visible for the given user
+        """
+        # Is the user anonymous?
+        if user.is_anonymous():
+            if self.tags.filter(is_public=True).exists():
+                return True
+        else:
+            user_groups_set = set(user.groups.all())
+            for tag in self.tags.all():
+                if tag.is_public:
+                    return True
+                tag_groups_set = set(tag.groups.all())
+                # A tag without groups is visible to all authenticated users
+                if not tag_groups_set:
+                    return True
+                if tag_groups_set & user_groups_set:
+                    return True
+            # A media without tags is visible to all authenticated users
+            if not self.tags.all().exists():
+                return True
+        return False
+
 
 @python_2_unicode_compatible
 class Tag(models.Model):
@@ -37,5 +61,19 @@ class Tag(models.Model):
     def get_absolute_url(self):
         return reverse('tags.details', args=[self.name])
 
-    def get_browse_url(self):
-        return reverse('tags.browse', args=[self.name])
+    def is_visible_to(self, user):
+        """
+        Return True if this tag is visible to the given user
+        """
+        if self.is_public:
+            return True
+        if user.is_anonymous():
+            return False
+
+        tag_groups_set = set(self.groups.all())
+        if not tag_groups_set:
+            return True
+        user_groups_set = set(user.groups.all())
+        if tag_groups_set & user_groups_set:
+            return True
+        return False

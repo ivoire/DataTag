@@ -55,6 +55,10 @@ def details(request, path):
         medias = medias.filter(tags=tag)
         tags.append({'obj': tag, 'path': query_string})
 
+    # Special case for '' path. In this case medias are not filtered
+    if path == '':
+        medias = [media for media in medias if media.is_visible_to(request.user)]
+
     return render_to_response('DataTag/tag/details.html',
                               {'medias': medias, 'tags': tags},
                               context_instance=RequestContext(request))

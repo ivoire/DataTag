@@ -57,7 +57,7 @@ def details(request, path):
 
     # Special case for '' path. In this case medias are not filtered
     if path == '':
-        medias = [media for media in medias if media.is_visible_to(request.user)]
+        medias = [m for m in medias if m.is_visible_to(request.user)]
 
     return render_to_response('DataTag/tag/details.html',
                               {'medias': medias, 'tags': tags},

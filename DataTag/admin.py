@@ -19,6 +19,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'group_list', 'is_public')
     list_filter = ('groups',)
     filter_horizontal = ('groups',)
+
     def group_list(self, obj):
         return "|".join([tag.name for tag in obj.groups.all()])
 

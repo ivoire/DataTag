@@ -24,7 +24,7 @@ def browse(request, path):
         medias = medias.filter(tags=tag)
 
     sub_tags = []
-    for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]):
+    for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]).order_by('name'):
         if not tag.is_visible_to(request.user):
             continue
         local_medias = medias.filter(tags=tag)
@@ -53,6 +53,9 @@ def details(request, path):
             return HttpResponseForbidden()
         medias = medias.filter(tags=tag)
         tags.append({'obj': tag, 'path': query_string})
+
+    # TODO: order by dates (from EXIF data)
+    medias = medias.order_by('path')
 
     # Special case for '' path. In this case medias are not filtered
     if path == '':

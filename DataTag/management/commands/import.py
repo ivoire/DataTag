@@ -53,6 +53,15 @@ class Command(BaseCommand):
             for filename in files:
                 if filename == '.DataTag.yaml':
                     continue
+                # Do we have to skip this file?
+                skip = False
+                for exclude in root_conf.exclude:
+                    if fnmatch.fnmatchcase(filename, exclude):
+                        print("%s [skip]" % (filename))
+                        skip = True
+                if skip:
+                    continue
+
                 path = os.path.join(root, filename)
                 print(path)
                 media = Media(path=path)

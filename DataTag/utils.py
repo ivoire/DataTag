@@ -35,6 +35,7 @@ class Configuration:
     def __init__(self):
         self.medias = []
         self.tags = []
+        self.exclude = []
 
     def load(self, filename):
         try:
@@ -47,6 +48,8 @@ class Configuration:
                     self.tags.append(TagConf(tag['name'],
                                              set(tag.get('groups', [])),
                                              tag.get('public', False)))
+                for exclude in y.get('exclude', []):
+                    self.exclude.append(exclude)
         except IOError:
             pass
 
@@ -78,5 +81,7 @@ class Configuration:
                 to_dump['medias'] = medias
             if tags:
                 to_dump['tags'] = tags
+            if self.exclude:
+                to_dump['exclude'] = self.exclude
             yaml.dump(to_dump, f,
                       default_flow_style=False, default_style=None, indent=1)

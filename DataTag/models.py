@@ -12,7 +12,7 @@ from django.utils.encoding import python_2_unicode_compatible
 class Media(models.Model):
     tags = models.ManyToManyField('Tag', blank=True, null=True)
     path = models.FilePathField(path=settings.MEDIA_ROOT, recursive=True,
-                                max_length=256)
+                                max_length=256, db_index=True)
 
     def __str__(self):
         base_length = len(settings.MEDIA_ROOT)
@@ -51,7 +51,7 @@ class Media(models.Model):
 @python_2_unicode_compatible
 class Tag(models.Model):
     # TODO: name should be unique !
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, db_index=True)
     groups = models.ManyToManyField(Group, blank=True, null=True)
     is_public = models.BooleanField(default=False)
 

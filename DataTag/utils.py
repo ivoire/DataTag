@@ -73,6 +73,10 @@ class Configuration:
                 t['public'] = True
             tags.append(t)
         with open(filename, 'w') as f:
-            yaml.dump({'media': medias,
-                       'tags': tags}, f,
+            to_dump = {}
+            if medias:
+                to_dump['medias'] = medias
+            if tags:
+                to_dump['tags'] = tags
+            yaml.dump(to_dump, f,
                       default_flow_style=False, default_style=None, indent=1)

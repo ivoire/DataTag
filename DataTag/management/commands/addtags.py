@@ -6,6 +6,8 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
+from DataTag.utils import Configuration, MediaConf
+
 from optparse import make_option
 import yaml
 
@@ -25,35 +27,18 @@ class Command(BaseCommand):
         new_tags = set(args)
 
         # Load the tags from the configuration
-        local_tags = set()
-        pattern_in_local = False
-        try:
-            with open('.DataTag.yaml', 'r') as local_conf:
-                local_conf = yaml.load(local_conf)
-                if pattern in local_conf:
-                    pattern_in_local = True
-                    for tag in local_conf[pattern]['tags']:
-                        local_tags.add(tag)
-        except IOError:
-            print 'no such file or directory'
-            pass
+        local_conf = Configuration()
+        local_conf.load('.DataTag.yaml')
 
-        # Add the tags that are missing in the configuration
-        missing_tags = new_tags - local_tags
-        if missing_tags:
-            print("Adding missing tags")
-            print("===================")
+        # Look for the pattern
+        pattern_found = False
+        for media in local_conf.medias:
+            if media.pattern == pattern:
+                pattern_found = True
 
-            if pattern_in_local:
-                print "TODO"
-            else:
-                with open('.DataTag.yaml', 'a+') as local_conf:
-                    if '*' in pattern or ':' in pattern:
-                        local_conf.write("'%s':\n    tags:\n" % (pattern))
-                    else:
-                        local_conf.write("%s:\n    tags:\n" % (pattern))
-                    for tag in missing_tags:
-                        print(" - %s" % (tag))
-                        local_conf.write("        - %s\n" % (tag))
+        if pattern_found:
+            media.tags = list(set(media.tags) | new_tags)
         else:
-            print("No missing tags")
+            local_conf.medias.append(MediaConf(pattern, list(new_tags)))
+
+        local_conf.dump(".DataTag.yaml")

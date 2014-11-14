@@ -33,7 +33,7 @@
 <div class="row">
   {% endif %}
   <div class="col-xs-3 col-md-3">
-    <a href="{{ media.get_absolute_url }}" data-lightbox="current_tag" class="thumbnail"><img src="{{ media.get_absolute_url }}?size=small" /></a>
+    <a href="{{ media.get_absolute_url }}" data-lightbox="current_tag" class="thumbnail"><img class="lazy" data-original="{{ media.get_absolute_url }}?size=small" /></a>
   </div>
 {% endfor %}
 </div>
@@ -41,4 +41,10 @@
 
 {% block script %}
 <script src="{% get_static_prefix %}DataTag/js/lightbox-v2.7.1.min.js"></script>
+<script src="{% get_static_prefix %}DataTag/js/lazyload-v1.9.3.min.js"></script>
+<script>
+$(function() {
+    $("img.lazy").lazyload();
+})
+</script>
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'DataTag/base.html' %}
+{% load static %}
 
 {% block title %}{% with tags|last as last_tag %}{{ last_tag.path|default:"/" }}{% endwith %}{% endblock %}
 
@@ -31,22 +32,56 @@
 {% endblock %}
 
 {% block body %}
-<div class="row">
-  {% for tag in sub_tags %}
-  {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
-</div>
-<div class="row">
-  {% endif %}
-  <div class="col-xs-3 col-md-3">
-    <div class="thumbnail">
-      <a href="{% url 'tags.details' tag.path %}"><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
-      <div class="caption"><a href="{% url 'tags.browse' tag.path %}">{{ tag.obj.name|truncatechars:25 }}</a>
-        <div class="pull-right">
-          <span class="badge">{{ tag.count }} <span class="glyphicon glyphicon-eye-open"></span></span>
+<div role="tabpanel">
+  <ul role="tablist" class="nav nav-tabs">
+    <li role="presentation" class="active"><a href="#Browse" aria-controls="Browse" role="tab" data-toggle="tab">Browse</a></li>
+    <li role="presentation"><a href="#Cloud" aria-controls="Cloud" role="tab" data-toggle="tab">Cloud</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="Browse">
+      <div class="row">
+        {% for tag in sub_tags %}
+        {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
+      </div>
+      <div class="row">
+        {% endif %}
+        <div class="col-xs-3 col-md-3">
+          <div class="thumbnail">
+            <a href="{% url 'tags.details' tag.path %}"><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
+            <div class="caption"><a href="{% url 'tags.browse' tag.path %}">{{ tag.obj.name|truncatechars:25 }}</a>
+              <div class="pull-right">
+                <span class="badge">{{ tag.count }} <span class="glyphicon glyphicon-eye-open"></span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="Cloud">
+      <div class="row">
+        <div class="col-md-12" id="tagcloud">
+        {% for tag in sub_tags %}
+          <a href="{% url 'tags.details' tag.path %}" rel="{{ tag.count }}">{{ tag.obj.name }}</a>
+        {% endfor %}
         </div>
       </div>
     </div>
   </div>
-  {% endfor %}
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="{% get_static_prefix %}DataTag/js/tagcloud-h5c3040c.js"></script>
+<script>
+$.fn.tagcloud.defaults = {
+  size: {start: 14, end: 50, unit: 'pt'},
+  color: {start: '#abd', end: '#f52'}
+};
+
+$(function () {
+  $('#tagcloud a').tagcloud();
+});
+</script>
 {% endblock %}

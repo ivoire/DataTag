@@ -24,7 +24,7 @@ def browse(request, path):
         medias = medias.filter(tags=tag)
 
     sub_tags = []
-    for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]).order_by('name'):
+    for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]).order_by('-name'):
         if not tag.is_visible_to(request.user):
             continue
         local_medias = medias.filter(tags=tag)
@@ -41,7 +41,6 @@ def browse(request, path):
 
 def details(request, path):
     # TODO: handle OR
-    # TODO: For path='' remove invisible medias
     # Check the existence of all tags
     tags = []
     medias = Media.objects.all()

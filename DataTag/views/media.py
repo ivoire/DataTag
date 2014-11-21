@@ -7,7 +7,6 @@ from django.core.servers.basehttp import FileWrapper
 from django.conf import settings
 from django.http import HttpResponseForbidden, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
-from django.template import RequestContext
 
 from DataTag.models import Media
 from DataTag.utils import mkdir

@@ -3,10 +3,8 @@
 
 from __future__ import unicode_literals
 
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import render_to_response
 from django.template import RequestContext
-
-from DataTag.models import Media, Tag
 
 
 def index(request):

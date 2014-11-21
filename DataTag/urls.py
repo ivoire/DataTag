@@ -3,8 +3,7 @@
 
 from __future__ import unicode_literals
 
-from django.conf.urls import include, patterns, url
-from django.core.urlresolvers import reverse_lazy
+from django.conf.urls import patterns, url
 
 from DataTag.views.account import DTAuthenticationForm
 

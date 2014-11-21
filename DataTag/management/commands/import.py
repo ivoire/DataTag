@@ -41,7 +41,7 @@ class Command(BaseCommand):
             tags[tag_conf.name] = tag
 
         print("Importing the Media")
-        for root, dirs, files in os.walk(settings.MEDIA_ROOT,
+        for root, _, files in os.walk(settings.MEDIA_ROOT,
                                          followlinks=True):
             # Parse the local configuration file (if it exists)
             local_conf = Configuration()

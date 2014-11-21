@@ -12,7 +12,6 @@ from DataTag.utils import Configuration
 
 import fnmatch
 import os
-import yaml
 
 
 class Command(BaseCommand):

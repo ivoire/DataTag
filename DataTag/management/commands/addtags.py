@@ -3,13 +3,11 @@
 
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from DataTag.utils import Configuration, MediaConf
 
 from optparse import make_option
-import yaml
 
 
 class Command(BaseCommand):

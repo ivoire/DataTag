@@ -31,7 +31,7 @@ class TagConf(object):
         self.public = public
 
 
-class Configuration:
+class Configuration(object):
     def __init__(self):
         self.medias = []
         self.tags = []

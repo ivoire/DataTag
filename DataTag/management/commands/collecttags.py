@@ -8,7 +8,6 @@ from django.core.management.base import BaseCommand
 
 from DataTag.utils import Configuration, TagConf
 import os
-import yaml
 
 
 class Command(BaseCommand):
@@ -19,8 +18,8 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         # Find the new tags
         used_tags = set()
-        for root, dirs, files in os.walk(settings.MEDIA_ROOT,
-                                         followlinks=True):
+        for root, _, files in os.walk(settings.MEDIA_ROOT,
+                                      followlinks=True):
             # Skip the root configuration file
             if root == settings.MEDIA_ROOT:
                 continue

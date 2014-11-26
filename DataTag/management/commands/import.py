@@ -50,9 +50,9 @@ class Command(BaseCommand):
             if '.DataTag.yaml' in files:
                 local_conf.load(os.path.join(root, '.DataTag.yaml'))
 
-            # Add all files
+            # Add all files, skipping hidden files and excluded ones
             for filename in files:
-                if filename == '.DataTag.yaml':
+                if filename[0] == '.':
                     continue
                 # Do we have to skip this file?
                 skip = False

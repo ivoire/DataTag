@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 
+from django.db import transaction
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
@@ -19,6 +20,7 @@ class Command(BaseCommand):
     help = 'Synchronize the file system with the database'
     option_list = BaseCommand.option_list
 
+    @transaction.atomic
     def handle(self, *args, **kwargs):
         print("Removing old data")
         Media.objects.all().delete()

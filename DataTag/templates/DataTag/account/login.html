@@ -54,7 +54,7 @@
       {{ form.password }}
     <button class="btn btn-large btn-primary" type="submit">{% trans "Log in" %}</button>
     <input type="hidden" name="next" value="{{ next }}" />
-    <a href="">{% trans "Create an account" %}</a>
+    <a href="{% url 'accounts.register' %}">{% trans "Create an account" %}</a>
   </form>
   <div class="form-signin">
     <p>{% trans "Forgotten your password?" %}</p>

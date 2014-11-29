@@ -20,6 +20,7 @@ urlpatterns += patterns('django.contrib.auth.views',
 
 # Account
 urlpatterns += patterns('DataTag.views.account',
+    url(r'^accounts/register/$', 'register', name='accounts.register'),
     url(r'^accounts/profile/$', 'profile', name='accounts.profile'),
 )
 

@@ -34,7 +34,7 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
-  <li><a href="">{% trans "Account" %}</a></li>
+  <li><a href="{% url 'accounts.profile' %}">{% trans "Account" %}</a></li>
   <li class="activate">{% trans "Log in" %}</li>
 {% endblock %}
 

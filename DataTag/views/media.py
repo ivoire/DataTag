@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 
 from django.core.servers.basehttp import FileWrapper
 from django.conf import settings
-from django.http import HttpResponseForbidden, StreamingHttpResponse
+from django.http import Http404, HttpResponseForbidden, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 
 from DataTag.models import Media
@@ -32,9 +32,13 @@ def media(request, path):
             mkdir(os.path.dirname(smallpath))
 
             # Create the thumbnail, rotating if needed
-            image = Image.open(pathname)
+            try:
+                image = Image.open(pathname)
+            except OSError:
+                raise Http404
             exif = image._getexif()
             if exif:
+                # Get orientation
                 orientation = exif.get(0x0112, 0)
                 if orientation == 3:
                     image = image.transpose(Image.ROTATE_180)

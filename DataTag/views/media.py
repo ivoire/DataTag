@@ -48,9 +48,9 @@ def media(request, path):
                     image = image.transpose(Image.ROTATE_90)
 
             if size == 'small':
-                image.thumbnail((200, 200), Image.ANTIALIAS)
+                image.thumbnail((280, 210), Image.ANTIALIAS)
             else:
-                image.thumbnail((800, 800), Image.ANTIALIAS)
+                image.thumbnail((800, 600), Image.ANTIALIAS)
             image.save(smallpath)
 
         pathname = smallpath

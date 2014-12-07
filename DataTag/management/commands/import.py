@@ -44,7 +44,7 @@ class Command(BaseCommand):
 
         print("Importing the Media")
         for root, _, files in os.walk(settings.MEDIA_ROOT,
-                                         followlinks=True):
+                                      followlinks=True):
             # Parse the local configuration file (if it exists)
             local_conf = Configuration()
             if '.DataTag.yaml' in files:

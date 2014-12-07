@@ -108,7 +108,7 @@ def register(request):
     if request.method == 'POST':
         user_form = DTUserCreationForm(request.POST)
         if user_form.is_valid():
-            new_user = user_form.save()
+            user_form.save()
             return render_to_response('DataTag/account/register_end.html', context_instance=RequestContext(request))
         else:
             messages.error(request, _("Some information are missing or mistyped"))

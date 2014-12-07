@@ -33,7 +33,8 @@ class Command(BaseCommand):
         tags = {}
         for tag_conf in root_conf.tags:
             print(" - %s" % (tag_conf.name))
-            tag = Tag(name=tag_conf.name, is_public=tag_conf.public)
+            tag = Tag(name=tag_conf.name, is_public=tag_conf.public,
+                      is_root=tag_conf.root)
             tag.save()
             # Add groups
             for group in tag_conf.groups:

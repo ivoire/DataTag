@@ -4,5 +4,6 @@ tags:
   groups:
   - group_1
   public: true
+  root: true
 exclude:
 - .directory

@@ -53,6 +53,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=128, db_index=True)
     groups = models.ManyToManyField(Group, blank=True, null=True)
     is_public = models.BooleanField(default=False)
+    is_root = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s" % (self.name)

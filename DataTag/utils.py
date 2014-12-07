@@ -25,10 +25,11 @@ class MediaConf(object):
 
 
 class TagConf(object):
-    def __init__(self, name, groups, public):
+    def __init__(self, name, groups, public, root):
         self.name = name
         self.groups = groups
         self.public = public
+        self.root = root
 
 
 class Configuration(object):
@@ -47,7 +48,8 @@ class Configuration(object):
                 for tag in y_conf.get('tags', []):
                     self.tags.append(TagConf(tag['name'],
                                              set(tag.get('groups', [])),
-                                             tag.get('public', False)))
+                                             tag.get('public', False),
+                                             tag.get('root', False)))
                 for exclude in y_conf.get('exclude', []):
                     self.exclude.append(exclude)
         except IOError:
@@ -74,6 +76,8 @@ class Configuration(object):
                 new_tag['groups'] = list(tag.groups)
             if tag.public:
                 new_tag['public'] = True
+            if tag.root:
+                new_tag['root'] = True
             tags.append(new_tag)
         with open(filename, 'w') as fout:
             to_dump = {}

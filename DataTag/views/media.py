@@ -34,7 +34,7 @@ def media(request, path):
             # Create the thumbnail, rotating if needed
             try:
                 image = Image.open(pathname)
-            except OSError:
+            except (OSError, IOError):
                 raise Http404
             exif = image._getexif()
             if exif:

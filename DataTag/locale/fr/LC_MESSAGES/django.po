@@ -1,0 +1,222 @@
+# French translation
+# Copyright (C) Duraffort Rémi
+# This file is distributed under the same license as the DataTag package.
+# Rémi Duraffort. 2014
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-11 18:47+0000\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: templates/DataTag/account/logged_out.html:4
+#: templates/DataTag/account/logged_out.html:36
+msgid "Logged out"
+msgstr ""
+
+#: templates/DataTag/account/logged_out.html:28
+#: templates/DataTag/account/login.html:36
+#: templates/DataTag/account/password_change.html:9
+#: templates/DataTag/account/profile.html:9
+#: templates/DataTag/account/register.html:9
+#: templates/DataTag/account/register_end.html:9
+#: templates/DataTag/account/update.html:9 templates/DataTag/base.html:35
+msgid "Home"
+msgstr ""
+
+#: templates/DataTag/account/logged_out.html:29
+#: templates/DataTag/account/login.html:37
+#: templates/DataTag/account/password_change.html:10
+#: templates/DataTag/account/profile.html:10
+#: templates/DataTag/account/register.html:10
+#: templates/DataTag/account/register_end.html:10
+#: templates/DataTag/account/update.html:10
+msgid "Account"
+msgstr ""
+
+#: templates/DataTag/account/logged_out.html:30 templates/DataTag/base.html:45
+msgid "Log out"
+msgstr ""
+
+#: templates/DataTag/account/logged_out.html:37
+msgid "Thanks for using DataTag."
+msgstr "Merci d'avoir utilisé DataTag."
+
+#: templates/DataTag/account/logged_out.html:38
+msgid "Log in again"
+msgstr ""
+
+#: templates/DataTag/account/login.html:4
+#: templates/DataTag/account/login.html:38
+#: templates/DataTag/account/login.html:55 templates/DataTag/base.html:49
+msgid "Log in"
+msgstr ""
+
+#: templates/DataTag/account/login.html:46
+msgid ""
+"<strong>Wrong username or password</strong>: Note that both fields may be "
+"case-sensitive"
+msgstr ""
+"<strong>Mauvais utilisateur ou mot de passe</strong> : notez que les deux "
+"champs sont sensibles à la casse"
+
+#: templates/DataTag/account/login.html:52
+msgid "Please sign in"
+msgstr "Veuillez vous identifier"
+
+#: templates/DataTag/account/login.html:57
+#: templates/DataTag/account/register.html:16
+msgid "Create an account"
+msgstr "Créer un compte"
+
+#: templates/DataTag/account/login.html:60
+msgid "Forgotten your password?"
+msgstr "Mot de passe oublié ?"
+
+#: templates/DataTag/account/login.html:61
+msgid "Request a new one:"
+msgstr "Demandez-en un nouveau :"
+
+#: templates/DataTag/account/login.html:61
+msgid "Password reset"
+msgstr ""
+
+#: templates/DataTag/account/password_change.html:4
+#: templates/DataTag/account/password_change.html:11
+#: templates/DataTag/account/password_change.html:16
+msgid "Change password"
+msgstr ""
+
+#: templates/DataTag/account/password_change.html:24 views/account.py:42
+msgid "Old password"
+msgstr ""
+
+#: templates/DataTag/account/password_change.html:33
+#: templates/DataTag/account/password_change.html:42 views/account.py:44
+#: views/account.py:45
+msgid "New password"
+msgstr ""
+
+#: templates/DataTag/account/password_change.html:52
+msgid "Change"
+msgstr ""
+
+#: templates/DataTag/account/profile.html:15
+msgid "My profile"
+msgstr "Mon profil"
+
+#: templates/DataTag/account/profile.html:31
+msgid "Information"
+msgstr "Informations"
+
+#: templates/DataTag/account/profile.html:31
+#: templates/DataTag/account/profile.html:40
+msgid "update"
+msgstr "mettre à jour"
+
+#: templates/DataTag/account/profile.html:35
+msgid "Name"
+msgstr "Nom"
+
+#: templates/DataTag/account/profile.html:37
+#: templates/DataTag/account/register.html:82
+msgid "email"
+msgstr ""
+
+#: templates/DataTag/account/profile.html:39
+#: templates/DataTag/account/register.html:43
+#: templates/DataTag/account/register.html:52 views/account.py:28
+#: views/account.py:65 views/account.py:66
+msgid "Password"
+msgstr ""
+
+#: templates/DataTag/account/register.html:4
+#: templates/DataTag/account/register.html:11
+#: templates/DataTag/account/register.html:93
+msgid "Register"
+msgstr "S'inscrire"
+
+#: templates/DataTag/account/register.html:32
+msgid "Account information"
+msgstr "Informations sur le compte"
+
+#: templates/DataTag/account/register.html:34 views/account.py:26
+#: views/account.py:63
+msgid "Username"
+msgstr ""
+
+#: templates/DataTag/account/register.html:62
+#: templates/DataTag/account/update.html:35
+msgid "Personnal information"
+msgstr "Informations personnelles"
+
+#: templates/DataTag/account/register.html:64
+#: templates/DataTag/account/update.html:37
+msgid "First name"
+msgstr ""
+
+#: templates/DataTag/account/register.html:73
+#: templates/DataTag/account/update.html:46
+msgid "Last name"
+msgstr ""
+
+#: templates/DataTag/account/register_end.html:4
+#: templates/DataTag/account/register_end.html:11
+msgid "Register end"
+msgstr "Fin de l'enregistrement"
+
+#: templates/DataTag/account/register_end.html:16
+msgid "Account created"
+msgstr "Compte créé"
+
+#: templates/DataTag/account/register_end.html:21
+msgid "Your account is waiting for admin confirmation."
+msgstr "Votre compte est en attente de la validation par un administrateur."
+
+#: templates/DataTag/account/register_end.html:22
+msgid ""
+"An admin will soon validate your account and you will be able to login on "
+"DataTag."
+msgstr ""
+"Un administrateur va bientôt valider votre compte. Vous pourrez alors vous "
+"identifier."
+
+#: templates/DataTag/account/update.html:4
+#: templates/DataTag/account/update.html:11
+#: templates/DataTag/account/update.html:57
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: templates/DataTag/account/update.html:16
+msgid "Update my account"
+msgstr "Mettre à jour le compte"
+
+#: templates/DataTag/base.html:36
+msgid "Browse"
+msgstr "Parcourir"
+
+#: templates/DataTag/base.html:43
+msgid "Profile"
+msgstr "Profil"
+
+#: templates/DataTag/base.html:68
+msgid "About"
+msgstr "À propos"
+
+#: views/account.py:114
+msgid "Some information are missing or mistyped"
+msgstr "Certains éléments sont manquants ou malformatés"
+
+#: views/account.py:125
+msgid "Password changed successfully"
+msgstr ""
+
+#: views/account.py:142
+msgid "Personnal information updated"
+msgstr "Informations personelles mise à jour"

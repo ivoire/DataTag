@@ -1,11 +1,12 @@
 {% extends 'DataTag/base.html' %}
+{% load i18n %}
 
-{% block title %}Main page{% endblock %}
+{% block title %}{% trans "Main page" %}{% endblock %}
 
 {% block nav-index %}active{% endblock %}
 
 {% block breadcrumb %}
-<li>Home</li>
+<li>{% trans "Home" %}</li>
 {% endblock %}
 
 {% block body %}

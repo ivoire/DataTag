@@ -1,5 +1,5 @@
 {% extends 'DataTag/base.html' %}
-{% load static %}
+{% load i18n static %}
 
 {% block title %}{% with tags|last as last_tag %}{{ last_tag.path|default:"/" }}{% endwith %}{% endblock %}
 
@@ -20,8 +20,8 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<li><a href="{% url 'index' %}">Home</a></li>
-<li><a href="{% url 'tags.browse.root' %}">Browse</a></li>
+<li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+<li><a href="{% url 'tags.browse.root' %}">{% trans "Browse" %}</a></li>
 {% for tag in tags %}
   {% if forloop.last %}
     <li class="activate">{{ tag.obj.name }}</li>
@@ -35,12 +35,12 @@
 <div role="tabpanel">
   <ul role="tablist" class="nav nav-tabs">
 {% if root_tags %}
-    <li role="presentation" class="active"><a href="#Root" aria-controls="Root" role="tab" data-toggle="tab">Root</a></li>
-    <li role="presentation"><a href="#Browse" aria-controls="Browse" role="tab" data-toggle="tab">Browse</a></li>
+    <li role="presentation" class="active"><a href="#Root" aria-controls="Root" role="tab" data-toggle="tab">{% trans "Root" %}</a></li>
+    <li role="presentation"><a href="#Browse" aria-controls="Browse" role="tab" data-toggle="tab">{% trans "Browse" %}</a></li>
 {% else %}
-    <li role="presentation" class="active"><a href="#Browse" aria-controls="Browse" role="tab" data-toggle="tab">Browse</a></li>
+    <li role="presentation" class="active"><a href="#Browse" aria-controls="Browse" role="tab" data-toggle="tab">{% trans "Browse" %}</a></li>
 {% endif %}
-    <li role="presentation"><a href="#Cloud" aria-controls="Cloud" role="tab" data-toggle="tab">Cloud</a></li>
+    <li role="presentation"><a href="#Cloud" aria-controls="Cloud" role="tab" data-toggle="tab">{% trans "Cloud" %}</a></li>
   </ul>
 
   <div class="tab-content">

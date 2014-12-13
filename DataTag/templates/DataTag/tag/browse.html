@@ -6,10 +6,6 @@
 {% block nav-browse %}active{% endblock %}
 
 {% block style %}
-  .thumbnail.directory {
-    min-height: 200px;
-    min-width: 200px;
-  }
   .caption {
     background: none repeat scroll 0 0 #dddddd;
     opacity: 0.5;
@@ -34,17 +30,13 @@
 {% block body %}
 <div role="tabpanel">
   <ul role="tablist" class="nav nav-tabs">
-{% if root_tags %}
     <li role="presentation" class="active"><a href="#Root" aria-controls="Root" role="tab" data-toggle="tab">{% trans "Root" %}</a></li>
-    <li role="presentation"><a href="#Browse" aria-controls="Browse" role="tab" data-toggle="tab">{% trans "Browse" %}</a></li>
-{% else %}
-    <li role="presentation" class="active"><a href="#Browse" aria-controls="Browse" role="tab" data-toggle="tab">{% trans "Browse" %}</a></li>
-{% endif %}
+    <li role="presentation"><a href="#NonRoot" aria-controls="NonRoot" role="tab" data-toggle="tab">{% trans "Non Root" %}</a></li>
+    <li role="presentation"><a href="#AllTags" aria-controls="AllTags" role="tab" data-toggle="tab">{% trans "All tags" %}</a></li>
     <li role="presentation"><a href="#Cloud" aria-controls="Cloud" role="tab" data-toggle="tab">{% trans "Cloud" %}</a></li>
   </ul>
 
   <div class="tab-content">
-{% if root_tags %}
     <div role="tabpanel" class="tab-pane active" id="Root">
       <div class="row">
         {% for tag in root_tags %}
@@ -65,9 +57,29 @@
         {% endfor %}
       </div>
     </div>
-{% endif %}
 
-    <div role="tabpanel" class="tab-pane{% if not root_tags%} active{% endif %}" id="Browse">
+    <div role="tabpanel" class="tab-pane" id="NonRoot">
+      <div class="row">
+        {% for tag in non_root_tags %}
+        {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
+      </div>
+      <div class="row">
+        {% endif %}
+        <div class="col-xs-3 col-md-3">
+          <div class="thumbnail">
+            <a href="{% url 'tags.details' tag.path %}"><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
+            <div class="caption"><a href="{% url 'tags.browse' tag.path %}">{{ tag.obj.name|truncatechars:25 }}</a>
+              <div class="pull-right">
+                <span class="badge">{{ tag.count }} <span class="glyphicon glyphicon-eye-open"></span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="AllTags">
       <div class="row">
         {% for tag in sub_tags %}
         {% if forloop.counter0|divisibleby:"4" and not forloop.first %}

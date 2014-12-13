@@ -16,6 +16,7 @@ def browse(request, path):
     query_string = ''
     tags = []
     root_tags = []
+    non_root_tags = []
     sub_tags = []
     path_elements = [p for p in path.split('/') if p]
 
@@ -34,25 +35,21 @@ def browse(request, path):
         local_medias = medias.filter(tags=tag)
         count = local_medias.count()
         if count:
+            if tag.is_root:
+                root_tags.insert(0, {'obj': tag, 'count': count,
+                                  'path': (query_string + '/' + tag.name),
+                                  'thumbnail': local_medias.order_by('?')[0]})
+            else:
+                non_root_tags.append({'obj': tag, 'count': count,
+                                      'path': (query_string + '/' + tag.name),
+                                      'thumbnail': local_medias.order_by('?')[0]})
             sub_tags.append({'obj': tag, 'count': count,
                              'path': (query_string + '/' + tag.name),
                              'thumbnail': local_medias.order_by('?')[0]})
 
-    if len(path_elements) == 0:
-        # Grab the root tags
-        for tag in Tag.objects.filter(is_root=True).order_by('name'):
-            if not tag.is_visible_to(request.user):
-                continue
-            local_medias = medias.filter(tags=tag)
-            count = local_medias.count()
-            if count:
-                root_tags.append({'obj': tag, 'count': count,
-                                 'path': (query_string + '/' + tag.name),
-                                 'thumbnail': local_medias.order_by('?')[0]})
-
-
     return render_to_response('DataTag/tag/browse.html',
                               {'tags': tags, 'root_tags': root_tags,
+                               'non_root_tags': non_root_tags,
                                'sub_tags': sub_tags},
                               context_instance=RequestContext(request))
 

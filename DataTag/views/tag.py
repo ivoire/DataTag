@@ -69,7 +69,7 @@ def details(request, path):
         tags.append({'obj': tag, 'path': query_string})
 
     # TODO: order by dates (from EXIF data)
-    medias = medias.order_by('path')
+    medias = medias.order_by('date')
 
     # Special case for '' path. In this case medias are not filtered
     if path == '':

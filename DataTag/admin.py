@@ -7,7 +7,7 @@ from DataTag.models import Media, Tag
 
 
 class MediaAdmin(admin.ModelAdmin):
-    list_display = ('path_short', 'tag_list')
+    list_display = ('path_short', 'tag_list', 'date')
     list_filter = ('tags',)
     filter_horizontal = ('tags',)
     search_fields = ('path',)

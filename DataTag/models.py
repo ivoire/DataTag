@@ -12,6 +12,7 @@ class Media(models.Model):
     tags = models.ManyToManyField('Tag', blank=True, null=True)
     path = models.FilePathField(path=settings.MEDIA_ROOT, recursive=True,
                                 max_length=256, db_index=True)
+    date = models.DateTimeField()
 
     def __str__(self):
         base_length = len(settings.MEDIA_ROOT)

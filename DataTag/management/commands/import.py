@@ -7,12 +7,16 @@ from django.db import transaction
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 
 from DataTag.models import Media, Tag
 from DataTag.utils import Configuration
 
+import datetime
 import fnmatch
 import os
+from PIL import Image
+import pytz
 
 
 class Command(BaseCommand):
@@ -31,6 +35,7 @@ class Command(BaseCommand):
         root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
         tags = {}
+        tz = pytz.timezone(settings.TIME_ZONE)
         for tag_conf in root_conf.tags:
             print(" - %s" % (tag_conf.name))
             tag = Tag(name=tag_conf.name, is_public=tag_conf.public,
@@ -65,8 +70,18 @@ class Command(BaseCommand):
                     continue
 
                 path = os.path.join(root, filename)
+                date = timezone.now()
+                try:
+                    image = Image.open(path)
+                    exif = image._getexif()
+                    if exif and 0x9003 in exif:
+                        date = datetime.datetime.strptime(exif[0x9003],
+                                                          "%Y:%m:%d %H:%M:%S")
+                        date = tz.localize(date)
+                except (OSError, IOError):
+                    pass
                 print(path)
-                media = Media(path=path)
+                media = Media(path=path, date=date)
                 media.save()
                 for media_conf in local_conf.medias:
                     if fnmatch.fnmatchcase(filename, media_conf.pattern):

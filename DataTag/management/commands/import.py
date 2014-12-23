@@ -35,6 +35,7 @@ class Command(BaseCommand):
         root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
         tags = {}
+        # TODO: add a specific option for this
         tz = pytz.timezone(settings.TIME_ZONE)
         for tag_conf in root_conf.tags:
             print(" - %s" % (tag_conf.name))
@@ -73,12 +74,15 @@ class Command(BaseCommand):
                 date = timezone.now()
                 try:
                     image = Image.open(path)
-                    exif = image._getexif()
-                    if exif and 0x9003 in exif:
-                        date = datetime.datetime.strptime(exif[0x9003],
-                                                          "%Y:%m:%d %H:%M:%S")
-                        date = tz.localize(date)
+                    # TODO: read more metada using something like readexif
+                    if hasattr(image, '_getexif') and image._getexif() is not None:
+                        exif_date = image._getexif().get(0x9003, u'0000:00:00 00:00:00')
+                        if exif_date != u'0000:00:00 00:00:00':
+                            date = datetime.datetime.strptime(exif_date,
+                                                              "%Y:%m:%d %H:%M:%S")
+                            date = tz.localize(date)
                 except (OSError, IOError):
+                    # TODO: do a stat to get the last modified date
                     pass
                 print(path)
                 media = Media(path=path, date=date)

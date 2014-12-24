@@ -29,23 +29,20 @@ def browse(request, path):
         tags.append({'obj': tag, 'path': query_string})
         medias = medias.filter(tags=tag)
 
-    for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]).order_by('-name'):
+    for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]).prefetch_related('groups').order_by('-name'):
         if not tag.is_visible_to(request.user):
             continue
         local_medias = medias.filter(tags=tag)
         count = local_medias.count()
         if count:
+            obj = {'obj': tag, 'count': count,
+                   'path': (query_string + '/' + tag.name),
+                   'thumbnail': local_medias.order_by('?')[0]}
             if tag.is_root:
-                root_tags.insert(0, {'obj': tag, 'count': count,
-                                  'path': (query_string + '/' + tag.name),
-                                  'thumbnail': local_medias.order_by('?')[0]})
+                root_tags.insert(0, obj)
             else:
-                non_root_tags.append({'obj': tag, 'count': count,
-                                      'path': (query_string + '/' + tag.name),
-                                      'thumbnail': local_medias.order_by('?')[0]})
-            sub_tags.append({'obj': tag, 'count': count,
-                             'path': (query_string + '/' + tag.name),
-                             'thumbnail': local_medias.order_by('?')[0]})
+                non_root_tags.append(obj)
+            sub_tags.append(obj)
 
     return render_to_response('DataTag/tag/browse.html',
                               {'tags': tags, 'root_tags': root_tags,

@@ -4,7 +4,9 @@
 from __future__ import unicode_literals
 
 import errno
+import json
 import os
+import subprocess
 import yaml
 
 
@@ -16,6 +18,22 @@ def mkdir(path):
             pass
         else:
             raise
+
+
+def load_exif(filename):
+    try:
+        out = subprocess.check_output(['exiftool', '-j', filename],
+                                      stderr=subprocess.STDOUT,
+                                      universal_newlines=True)
+    except (OSError, subprocess.CalledProcessError):
+        return {}
+
+    try:
+        exif = json.loads(out)
+    except (TypeError, ValueError):
+        return {}
+
+    return exif[0]
 
 
 class MediaConf(object):

@@ -10,12 +10,11 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from DataTag.models import Media, Tag
-from DataTag.utils import Configuration
+from DataTag.utils import Configuration, load_exif
 
 import datetime
 import fnmatch
 import os
-from PIL import Image
 import pytz
 
 
@@ -71,20 +70,20 @@ class Command(BaseCommand):
                     continue
 
                 path = os.path.join(root, filename)
-                date = timezone.now()
-                try:
-                    image = Image.open(path)
-                    # TODO: read more metada using something like readexif
-                    if hasattr(image, '_getexif') and image._getexif() is not None:
-                        exif_date = image._getexif().get(0x9003, u'0000:00:00 00:00:00')
-                        if exif_date != u'0000:00:00 00:00:00':
-                            date = datetime.datetime.strptime(exif_date,
-                                                              "%Y:%m:%d %H:%M:%S")
-                            date = tz.localize(date)
-                except (OSError, IOError):
-                    # TODO: do a stat to get the last modified date
-                    pass
                 print(path)
+
+                # Read EXIF data
+                date = timezone.now()
+                exif = load_exif(path)
+                if 'DateTimeOriginal' in exif:
+                    try:
+                        date = datetime.datetime.strptime(exif['DateTimeOriginal'],
+                                                          "%Y:%m:%d %H:%M:%S")
+                        date = tz.localize(date)
+                    except ValueError:
+                        print("  invalid date (%s)" % exif['DateTimeOriginal'])
+                else:
+                    print("  no date found")
                 media = Media(path=path, date=date)
                 media.save()
                 for media_conf in local_conf.medias:

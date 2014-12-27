@@ -13,6 +13,7 @@ from DataTag.utils import mkdir
 
 import mimetypes
 import os
+import subprocess
 from PIL import Image
 
 
@@ -24,34 +25,52 @@ def media(request, path):
         return HttpResponseForbidden()
 
     # Get a thumbnails if requested
-    size = request.GET.get('size', None)
-    if size == 'small' or size == 'medium':
-        smallpath = os.path.join(settings.CACHE_ROOT, size, path)
+    size_str = request.GET.get('size', None)
+    if size_str == 'small' or size_str == 'medium':
+        # Set the size
+        if size_str == 'small':
+            size = (280, 210)
+        else:
+            size = (800, 600)
+
+        smallpath = os.path.join(settings.CACHE_ROOT, size_str, path)
         if not os.path.isfile(smallpath):
             # Create the destination directory
             mkdir(os.path.dirname(smallpath))
 
-            # Create the thumbnail, rotating if needed
+            # Detect the media format (image or video)
             try:
                 image = Image.open(pathname)
+                media_format = "image"
             except (OSError, IOError):
-                raise Http404
-            exif = image._getexif()
-            if exif:
-                # Get orientation
-                orientation = exif.get(0x0112, 0)
-                if orientation == 3:
-                    image = image.transpose(Image.ROTATE_180)
-                elif orientation == 6:
-                    image = image.transpose(Image.ROTATE_270)
-                elif orientation == 8:
-                    image = image.transpose(Image.ROTATE_90)
+                media_format = "video"
 
-            if size == 'small':
-                image.thumbnail((280, 210), Image.ANTIALIAS)
-            else:
-                image.thumbnail((800, 600), Image.ANTIALIAS)
-            image.save(smallpath)
+            if media_format == "image":
+                exif = image._getexif()
+                if exif:
+                    # Get orientation
+                    orientation = exif.get(0x0112, 0)
+                    if orientation == 3:
+                        image = image.transpose(Image.ROTATE_180)
+                    elif orientation == 6:
+                        image = image.transpose(Image.ROTATE_270)
+                    elif orientation == 8:
+                        image = image.transpose(Image.ROTATE_90)
+
+                image.thumbnail(size, Image.ANTIALIAS)
+                image.save(smallpath)
+
+            elif media_format == "video":
+                try:
+                    subprocess.check_output(['ffmpeg', '-i', pathname,
+                                             '-vcodec', 'mjpeg',
+                                             '-vframes', '1',
+                                             '-an', '-f', 'rawvideo',
+                                             '-s', "%dx%d" % size,
+                                             smallpath],
+                                            stderr=subprocess.STDOUT)
+                except Exception:
+                    raise Http404
 
         pathname = smallpath
 

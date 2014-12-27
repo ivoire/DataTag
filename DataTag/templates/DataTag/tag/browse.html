@@ -31,8 +31,8 @@
 <div role="tabpanel">
   <ul role="tablist" class="nav nav-tabs">
     <li role="presentation" class="active"><a href="#Root" aria-controls="Root" role="tab" data-toggle="tab">{% trans "Root" %}</a></li>
-    <li role="presentation"><a href="#NonRoot" aria-controls="NonRoot" role="tab" data-toggle="tab">{% trans "Non Root" %}</a></li>
-    <li role="presentation"><a href="#AllTags" aria-controls="AllTags" role="tab" data-toggle="tab">{% trans "All tags" %}</a></li>
+    <li role="presentation"><a href="#Leaf" aria-controls="Leaf" role="tab" data-toggle="tab">{% trans "Leaf" %}</a></li>
+    <li role="presentation"><a href="#AllTags" aria-controls="AllTags" role="tab" data-toggle="tab">{% trans "All" %}</a></li>
     <li role="presentation"><a href="#Cloud" aria-controls="Cloud" role="tab" data-toggle="tab">{% trans "Cloud" %}</a></li>
   </ul>
 
@@ -58,7 +58,7 @@
       </div>
     </div>
 
-    <div role="tabpanel" class="tab-pane" id="NonRoot">
+    <div role="tabpanel" class="tab-pane" id="Leaf">
       <div class="row">
         {% for tag in non_root_tags %}
         {% if forloop.counter0|divisibleby:"4" and not forloop.first %}

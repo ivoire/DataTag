@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-11 18:47+0000\n"
+"POT-Creation-Date: 2014-12-27 21:17+0000\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,6 +27,8 @@ msgstr ""
 #: templates/DataTag/account/register.html:9
 #: templates/DataTag/account/register_end.html:9
 #: templates/DataTag/account/update.html:9 templates/DataTag/base.html:35
+#: templates/DataTag/main/index.html:9 templates/DataTag/tag/browse.html:19
+#: templates/DataTag/tag/details.html:17
 msgid "Home"
 msgstr ""
 
@@ -159,12 +161,12 @@ msgstr "Informations personnelles"
 #: templates/DataTag/account/register.html:64
 #: templates/DataTag/account/update.html:37
 msgid "First name"
-msgstr ""
+msgstr "Prénom"
 
 #: templates/DataTag/account/register.html:73
 #: templates/DataTag/account/update.html:46
 msgid "Last name"
-msgstr ""
+msgstr "Nom"
 
 #: templates/DataTag/account/register_end.html:4
 #: templates/DataTag/account/register_end.html:11
@@ -197,7 +199,11 @@ msgstr "Mettre à jour"
 msgid "Update my account"
 msgstr "Mettre à jour le compte"
 
-#: templates/DataTag/base.html:36
+#: templates/DataTag/base.html:26
+msgid "Toggle navigation"
+msgstr "Naviguer"
+
+#: templates/DataTag/base.html:36 templates/DataTag/tag/browse.html:20
 msgid "Browse"
 msgstr "Parcourir"
 
@@ -208,6 +214,30 @@ msgstr "Profil"
 #: templates/DataTag/base.html:68
 msgid "About"
 msgstr "À propos"
+
+#: templates/DataTag/main/index.html:4
+msgid "Main page"
+msgstr ""
+
+#: templates/DataTag/tag/browse.html:33
+msgid "Root"
+msgstr "Racine"
+
+#: templates/DataTag/tag/browse.html:34
+msgid "Leaf"
+msgstr "Feuille"
+
+#: templates/DataTag/tag/browse.html:35
+msgid "All"
+msgstr "Tous"
+
+#: templates/DataTag/tag/browse.html:36
+msgid "Cloud"
+msgstr "Cloud"
+
+#: templates/DataTag/tag/details.html:18
+msgid "Tags"
+msgstr "Tags"
 
 #: views/account.py:114
 msgid "Some information are missing or mistyped"

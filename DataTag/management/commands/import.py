@@ -25,11 +25,11 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **kwargs):
-        print("Removing old data")
+        self.stdout.write("Removing old data")
         Media.objects.all().delete()
         Tag.objects.all().delete()
 
-        print("Importing Tags...")
+        self.stdout.write("Importing Tags...")
         root_conf = Configuration()
         root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
@@ -37,18 +37,18 @@ class Command(BaseCommand):
         # TODO: add a specific option for this
         tz = pytz.timezone(settings.TIME_ZONE)
         for tag_conf in root_conf.tags:
-            print(" - %s" % (tag_conf.name))
+            self.stdout.write(" - %s" % (tag_conf.name))
             tag = Tag(name=tag_conf.name, is_public=tag_conf.public,
                       is_root=tag_conf.root)
             tag.save()
             # Add groups
             for group in tag_conf.groups:
-                print("   - %s" % (group))
+                self.stdout.write("   - %s" % (group))
                 tag.groups.add(Group.objects.get(name=group))
 
             tags[tag_conf.name] = tag
 
-        print("Importing the Media")
+        self.stdout.write("Importing the Media")
         for root, _, files in os.walk(settings.MEDIA_ROOT,
                                       followlinks=True):
             # Parse the local configuration file (if it exists)
@@ -64,13 +64,13 @@ class Command(BaseCommand):
                 skip = False
                 for exclude in root_conf.exclude:
                     if fnmatch.fnmatchcase(filename, exclude):
-                        print("%s [skip]" % (filename))
+                        self.stdout.write("%s [skip]\n" % (filename))
                         skip = True
                 if skip:
                     continue
 
                 path = os.path.join(root, filename)
-                print(path)
+                self.stdout.write("%s" % path)
 
                 # Read EXIF data
                 date = timezone.now()
@@ -81,9 +81,9 @@ class Command(BaseCommand):
                                                           "%Y:%m:%d %H:%M:%S")
                         date = tz.localize(date)
                     except ValueError:
-                        print("  invalid date (%s)" % exif['DateTimeOriginal'])
+                        self.stdout.write(" => invalid date (%s)" % exif['DateTimeOriginal'])
                 else:
-                    print("  no date found")
+                    self.stdout.write(" => no date found")
                 media = Media(path=path, date=date)
                 media.save()
                 for media_conf in local_conf.medias:

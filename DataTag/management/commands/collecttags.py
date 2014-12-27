@@ -37,11 +37,11 @@ class Command(BaseCommand):
         # Add the tags that are missing in the root_tags
         missing_tags = used_tags - root_conf.tag_set()
         if missing_tags:
-            print("Adding missing tags")
-            print("===================")
+            self.stdout.write("Adding missing tags")
+            self.stdout.write("===================")
             for tag in missing_tags:
-                print(" - %s" % (tag))
+                self.stdout.write(" - %s" % (tag))
                 root_conf.tags.append(TagConf(tag, set(), False, False))
             root_conf.dump(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
         else:
-            print("No missing tags")
+            self.stdout.write("No missing tags")

@@ -229,7 +229,7 @@ msgstr "Feuille"
 
 #: templates/DataTag/tag/browse.html:35
 msgid "All"
-msgstr "Tous"
+msgstr ""
 
 #: templates/DataTag/tag/browse.html:36
 msgid "Cloud"

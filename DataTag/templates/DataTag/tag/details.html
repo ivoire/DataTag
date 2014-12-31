@@ -3,12 +3,6 @@
 
 {% block title %}{% with tags|last as last_tag %}{{ last_tag.path|default:"/" }}{% endwith %}{% endblock %}
 
-{% block style %}
-  .thumbnail.directory {
-    min-height: 200px;
-    min-width: 200px;
-{% endblock %}
-
 {% block head %}
 <link href="{% get_static_prefix %}DataTag/css/lightbox-v2.7.1.css" rel="stylesheet" />
 {% endblock %}

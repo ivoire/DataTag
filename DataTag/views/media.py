@@ -9,7 +9,7 @@ from django.http import Http404, HttpResponseForbidden, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 
 from DataTag.models import Media
-from DataTag.utils import mkdir
+from DataTag.utils import mkdir, keep_AR
 
 import mimetypes
 import os
@@ -63,6 +63,11 @@ def media(request, path):
                 image.save(smallpath)
 
             elif media_format == "video":
+                # If the video size is known, compute the right size to keep
+                # the A/R
+                if medias.width != 0 and media.height != 0:
+                    size = keep_AR((media.width, media.height), size)
+
                 # Create the thumbnail in a temp directory in order to use the
                 # use the right extensions for convert. In fact, convert uses
                 # the extension to guess the input and output format. This is

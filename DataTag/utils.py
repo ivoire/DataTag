@@ -36,6 +36,17 @@ def load_exif(filename):
     return exif[0]
 
 
+def keep_AR(old_size, new_size):
+    x, y = old_size
+    if x > new_size[0]:
+        y = int(max(y * new_size[0] / x, 1))
+        x = int(new_size[0])
+    if y > new_size[1]:
+        x = int(max(x * new_size[1] / y, 1))
+        y = int(new_size[1])
+    return (x, y)
+
+
 class MediaConf(object):
     def __init__(self, pattern, tags):
         self.pattern = pattern

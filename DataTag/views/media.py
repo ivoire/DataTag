@@ -13,7 +13,9 @@ from DataTag.utils import mkdir
 
 import mimetypes
 import os
+import shutil
 import subprocess
+import tempfile
 from PIL import Image
 
 
@@ -61,21 +63,42 @@ def media(request, path):
                 image.save(smallpath)
 
             elif media_format == "video":
+                # Create the thumbnail in a temp directory in order to use the
+                # use the right extensions for convert. In fact, convert uses
+                # the extension to guess the input and output format. This is
+                # not working for video thumbnails because we want to keep the
+                # original filename (including the extension).
+                tmp_dir = tempfile.mkdtemp('DataTag')
+                tmp_path = os.path.join(tmp_dir, 'thumbnail.jpg')
                 try:
                     subprocess.check_output(['ffmpeg', '-i', pathname,
                                              '-vcodec', 'mjpeg',
                                              '-vframes', '1',
                                              '-an', '-f', 'rawvideo',
                                              '-s', "%dx%d" % size,
-                                             smallpath],
+                                             tmp_path],
                                             stderr=subprocess.STDOUT)
+                    subprocess.check_output(['convert', tmp_path,
+                                             os.path.join(settings.STATIC_ROOT,
+                                                          'DataTag', 'img',
+                                                          'overlay.png'),
+                                             '-gravity', 'center', '-composite',
+                                             '-format', 'jpg', '-quality', '90',
+                                             tmp_path],
+                                            stderr=subprocess.STDOUT)
+                    # Move the file using shutil because the directories can be
+                    # on different filesystems.
+                    shutil.move(tmp_path, smallpath)
                 except Exception:
                     raise Http404
+                finally:
+                    shutil.rmtree(tmp_dir)
 
         pathname = smallpath
 
     # Stream the file
     wrapper = FileWrapper(open(pathname, 'rb'))
+    # FIXME: this will be wrong for video thumbnails
     mime = mimetypes.guess_type(pathname)
     response = StreamingHttpResponse(wrapper,
                                      content_type=mime[0] if mime[0]

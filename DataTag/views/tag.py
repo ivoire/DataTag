@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
@@ -18,7 +18,12 @@ def browse(request, path):
     root_tags = []
     non_root_tags = []
     sub_tags = []
+
+    # Skip too long requests
+    # TODO: should be a setting
     path_elements = [p for p in path.split('/') if p]
+    if len(path_elements) > 20:
+        return HttpResponseBadRequest()
 
     # Show only the selected tags
     for tag_name in path_elements:
@@ -57,7 +62,14 @@ def details(request, path):
     tags = []
     medias = Media.objects.all()
     query_string = ''
-    for tag_name in [p for p in path.split('/') if p]:
+
+    # Skip too long requests
+    # TODO: should be a setting
+    tag_name_list = [p for p in path.split('/') if p]
+    if len(tag_name_list) > 20:
+        return HttpResponseBadRequest()
+
+    for tag_name in tag_name_list:
         query_string = query_string + '/' + tag_name
         tag = get_object_or_404(Tag, name=tag_name)
         if not tag.is_visible_to(request.user):

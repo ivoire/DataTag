@@ -65,7 +65,7 @@ def media(request, path):
             elif media_format == "video":
                 # If the video size is known, compute the right size to keep
                 # the A/R
-                if medias.width != 0 and media.height != 0:
+                if media.width != 0 and media.height != 0:
                     size = keep_AR((media.width, media.height), size)
 
                 # Create the thumbnail in a temp directory in order to use the

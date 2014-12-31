@@ -7,13 +7,16 @@ from DataTag.models import Media, Tag
 
 
 class MediaAdmin(admin.ModelAdmin):
-    list_display = ('path_short', 'tag_list', 'date')
+    list_display = ('path_short', 'tag_list', 'size', 'date')
     list_filter = ('tags',)
     filter_horizontal = ('tags',)
     search_fields = ('path',)
 
     def path_short(self, obj):
         return obj.path[len(settings.MEDIA_ROOT)+1:]
+
+    def size(self, obj):
+        return "%dx%d" % (obj.width, obj.height)
 
     def tag_list(self, obj):
         return "|".join([tag.name for tag in obj.tags.all()])

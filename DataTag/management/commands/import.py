@@ -84,7 +84,9 @@ class Command(BaseCommand):
                         self.stdout.write(" => invalid date (%s)" % exif['DateTimeOriginal'])
                 else:
                     self.stdout.write(" => no date found")
-                media = Media(path=path, date=date)
+                media = Media(path=path, date=date,
+                              width=exif.get('ImageWidth', 0),
+                              height=exif.get('ImageHeight', 0))
                 media.save()
                 for media_conf in local_conf.medias:
                     if fnmatch.fnmatchcase(filename, media_conf.pattern):

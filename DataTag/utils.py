@@ -120,7 +120,7 @@ class Configuration(object):
             if self.exclude:
                 to_dump['exclude'] = self.exclude
             if self.default_groups:
-                to_dump['default'] = dict()
-                to_dump['default']['groups'] = self.default_groups
+                to_dump['defaults'] = dict()
+                to_dump['defaults']['groups'] = self.default_groups
             yaml.dump(to_dump, fout,
                       default_flow_style=False, default_style=None, indent=1)

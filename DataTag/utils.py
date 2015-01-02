@@ -66,6 +66,7 @@ class Configuration(object):
         self.medias = []
         self.tags = []
         self.exclude = []
+        self.default_groups = []
 
     def load(self, filename):
         try:
@@ -81,6 +82,8 @@ class Configuration(object):
                                              tag.get('root', False)))
                 for exclude in y_conf.get('exclude', []):
                     self.exclude.append(exclude)
+                for group_name in y_conf.get('defaults', {}).get('groups', []):
+                    self.default_groups.append(group_name)
         except IOError:
             pass
 
@@ -116,5 +119,7 @@ class Configuration(object):
                 to_dump['tags'] = tags
             if self.exclude:
                 to_dump['exclude'] = self.exclude
+            if self.default_groups:
+                to_dump['default']['groups'] = self.default_groups
             yaml.dump(to_dump, fout,
                       default_flow_style=False, default_style=None, indent=1)

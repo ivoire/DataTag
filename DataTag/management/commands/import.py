@@ -42,7 +42,12 @@ class Command(BaseCommand):
                       is_root=tag_conf.root)
             tag.save()
             # Add groups
-            for group in tag_conf.groups:
+            if tag_conf.groups:
+                group_list = tag_conf.groups
+            else:
+                group_list = root_conf.default_groups
+
+            for group in group_list:
                 self.stdout.write("   - %s" % (group))
                 tag.groups.add(Group.objects.get(name=group))
 

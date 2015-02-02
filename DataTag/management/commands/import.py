@@ -26,7 +26,8 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from DataTag.models import Media, Tag
-from DataTag.utils import Configuration, load_exif
+from DataTag.config import Configuration
+from DataTag.utils import load_exif
 
 import datetime
 import fnmatch

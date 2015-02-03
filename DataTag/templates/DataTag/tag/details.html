@@ -17,6 +17,9 @@
     <li><a href="{% url 'tags.details' tag.path %}">{{ tag.obj.name }}</a></li>
   {% endif %}
 {% endfor %}
+{% if medias|length < 200 %}
+  <a href=".?download" class="pull-right"><span class="glyphicon glyphicon-download"></span> Download</a>
+{% endif %}
 {% endblock %}
 
 {% block body %}

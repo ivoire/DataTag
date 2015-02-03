@@ -25,7 +25,7 @@ from django.http import Http404, HttpResponseForbidden, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 
 from DataTag.models import Media
-from DataTag.utils import create_thumbnail, keep_AR, mkdir
+from DataTag.utils import create_thumbnail, mkdir
 
 import mimetypes
 import os

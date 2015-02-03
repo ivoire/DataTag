@@ -19,11 +19,17 @@
 
 from __future__ import unicode_literals
 
-from django.http import HttpResponseForbidden, HttpResponseBadRequest
+from django.conf import settings
+from django.core.servers.basehttp import FileWrapper
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, StreamingHttpResponse
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
 from DataTag.models import Media, Tag
+from DataTag.utils import mkdir
+
+import os
+import tarfile
 
 
 def browse(request, path):
@@ -93,13 +99,38 @@ def details(request, path):
         medias = medias.filter(tags=tag)
         tags.append({'obj': tag, 'path': query_string})
 
-    # TODO: order by dates (from EXIF data)
+    # order by dates (from EXIF data)
     medias = medias.order_by('date')
 
-    # Special case for '' path. In this case medias are not filtered
-    if path == '':
-        medias = [m for m in medias if m.is_visible_to(request.user)]
+    if request.GET.get('download', None) is not None:
+        # Too many elements
+        # FIXME: should be a setting
+        if len(medias) > 200:
+            return HttpResponseForbidden()
 
-    return render_to_response('DataTag/tag/details.html',
-                              {'medias': medias, 'tags': tags},
-                              context_instance=RequestContext(request))
+        path = os.path.join(settings.CACHE_ROOT, 'downloads', *tag_name_list)
+        path = path + '.tar'
+        if not os.path.isfile(path):
+            mkdir(os.path.dirname(path))
+            with tarfile.open(path, 'w', dereference=True) as tar:
+                index = 1
+                for media in medias:
+                    ext = os.path.splitext(media.path)[1]
+                    tar.add(media.path, arcname="IMG_%04d%s" % (index, ext), recursive=False)
+                    index += 1
+        # Stream the file
+        wrapper = FileWrapper(open(path, 'rb'))
+        response = StreamingHttpResponse(wrapper,
+                                         content_type='application/x-tar')
+        response['Content-Length'] = os.path.getsize(path)
+        # TODO: will not work correctly if tag contains double quotes
+        response['Content-Disposition'] = "attachment; filename=\"%s\"" % os.path.basename(path)
+        return response
+    else:
+        # Special case for '' path. In this case medias are not filtered
+        if path == '':
+            medias = [m for m in medias if m.is_visible_to(request.user)]
+
+        return render_to_response('DataTag/tag/details.html',
+                                  {'medias': medias, 'tags': tags},
+                                  context_instance=RequestContext(request))

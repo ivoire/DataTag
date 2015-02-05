@@ -30,14 +30,14 @@
 {% block body %}
 <div role="tabpanel">
   <ul role="tablist" class="nav nav-tabs">
-    <li role="presentation" class="active"><a href="#Root" aria-controls="Root" role="tab" data-toggle="tab">{% trans "Root" %}</a></li>
-    <li role="presentation"><a href="#Leaf" aria-controls="Leaf" role="tab" data-toggle="tab">{% trans "Leaf" %}</a></li>
+    <li role="presentation"{% if root_tags %} class="active"{% endif %}><a href="#Root" aria-controls="Root" role="tab" data-toggle="tab">{% trans "Root" %}</a></li>
+    <li role="presentation"{% if not root_tags %} class="active"{% endif %}><a href="#Leaf" aria-controls="Leaf" role="tab" data-toggle="tab">{% trans "Leaf" %}</a></li>
     <li role="presentation"><a href="#AllTags" aria-controls="AllTags" role="tab" data-toggle="tab">{% trans "All" %}</a></li>
     <li role="presentation"><a href="#Cloud" aria-controls="Cloud" role="tab" data-toggle="tab">{% trans "Cloud" %}</a></li>
   </ul>
 
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="Root">
+    <div role="tabpanel" class="tab-pane{% if root_tags %} active{% endif %}" id="Root">
       <div class="row">
         {% for tag in root_tags %}
         {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
@@ -58,7 +58,7 @@
       </div>
     </div>
 
-    <div role="tabpanel" class="tab-pane" id="Leaf">
+    <div role="tabpanel" class="tab-pane{% if not root_tags %} active{% endif %}" id="Leaf">
       <div class="row">
         {% for tag in non_root_tags %}
         {% if forloop.counter0|divisibleby:"4" and not forloop.first %}

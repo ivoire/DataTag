@@ -10,4 +10,28 @@
 {% endblock %}
 
 {% block body %}
+<div class="jumbotron">
+  <h1>DataTag</h1>
+  <p class="lead">{% trans "Explore pictures and video stored into this Datatag instance!" %}</p>
+  {% if user.is_authenticated %}
+  <a class="btn btn-lg btn-success" href="{% url 'tags.browse.root' %}">{% trans "Pictures" %}</a>
+  {% else %}
+  <a class="btn btn-lg btn-success" href="{% url 'accounts.login' %}">{% trans "Log in" %}</a>
+  {% endif %}
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <h2>{% trans "Subscribe" %}</h2>
+    <p>{% trans "Create an account on DataTag. Without an account, you will only be able to access to public pictures and videos." %}</p>
+    <p>{% trans "Once created, your account will be validated by an administrator that will give you access to the right content." %}</p>
+    <a class="btn btn-default" href="{% url 'accounts.register' %}">{% trans "Register »" %}</a>
+  </div>
+  <div class="col-md-6">
+    <h2>{% trans "Browse" %}</h2>
+    <p>{% trans "Browse the tags to explore picture and videos. Each media is sorted by tags hat help to browse them by content." %}</p>
+    <p>{% trans "Even without an account, you can browse DataTag, but you will only have access to public pictures." %}</p>
+    <a class="btn btn-default" href="{% url 'tags.browse.root' %}">{% trans "Browse »" %}</a>
+  </div>
+</div>
 {% endblock %}

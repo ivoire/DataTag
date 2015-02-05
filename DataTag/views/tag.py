@@ -78,18 +78,23 @@ def browse(request, path):
                               context_instance=RequestContext(request))
 
 
+# TODO: handle OR
 def details(request, path):
-    # TODO: handle OR
-    # Check the existence of all tags
+    # Check that path is not empty. This should be forbidden by the url regular
+    # expressions. But better to be safe than sorry.
+    if path == '':
+        return HttpResponseBadRequest()
+
+    # Skip too long requests
+    tag_name_list = [p for p in path.split('/') if p]
+    # TODO: should be a setting
+    if len(tag_name_list) > 20:
+        return HttpResponseBadRequest()
+
+    # Check that all requested tags exists and are visible to the current user.
     tags = []
     medias = Media.objects.all()
     query_string = ''
-
-    # Skip too long requests
-    # TODO: should be a setting
-    tag_name_list = [p for p in path.split('/') if p]
-    if len(tag_name_list) > 20:
-        return HttpResponseBadRequest()
 
     for tag_name in tag_name_list:
         query_string = query_string + '/' + tag_name
@@ -102,7 +107,7 @@ def details(request, path):
     # order by dates (from EXIF data)
     medias = medias.order_by('date')
 
-    if request.GET.get('download', None) is not None:
+    if 'download' in request.GET:
         # Too many elements
         # FIXME: should be a setting
         if len(medias) > 200:
@@ -127,10 +132,6 @@ def details(request, path):
         response['Content-Disposition'] = "attachment; filename=\"%s\"" % os.path.basename(path)
         return response
     else:
-        # Special case for '' path. In this case medias are not filtered
-        if path == '':
-            medias = [m for m in medias if m.is_visible_to(request.user)]
-
         return render_to_response('DataTag/tag/details.html',
                                   {'medias': medias, 'tags': tags},
                                   context_instance=RequestContext(request))

@@ -22,7 +22,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, StreamingHttpResponse
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.template import RequestContext
 
 from DataTag.models import Media, Tag
@@ -70,6 +70,10 @@ def browse(request, path):
             else:
                 non_root_tags.append(obj)
             sub_tags.append(obj)
+
+    # If their is not tags to show, redirect to tag details
+    if not root_tags and not non_root_tags:
+        return redirect('tags.details', path=path)
 
     return render_to_response('DataTag/tag/browse.html',
                               {'tags': tags, 'root_tags': root_tags,

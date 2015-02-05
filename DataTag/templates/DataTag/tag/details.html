@@ -9,7 +9,7 @@
 
 {% block breadcrumb %}
 <li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
-<li><a href="{% url 'tags.root' %}">{% trans "Tags" %}</a></li>
+<li><a>{% trans "Tags" %}</a></li>
 {% for tag in tags %}
   {% if forloop.last %}
     <li class="activate">{{ tag.obj.name }}</li>

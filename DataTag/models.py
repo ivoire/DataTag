@@ -54,7 +54,8 @@ class Media(models.Model):
                 return True
         else:
             user_groups_set = set(user.groups.all())
-            for tag in self.tags.all():
+            tags = self.tags.all()
+            for tag in tags:
                 if tag.is_public:
                     return True
                 tag_groups_set = set(tag.groups.all())
@@ -64,7 +65,7 @@ class Media(models.Model):
                 if tag_groups_set & user_groups_set:
                     return True
             # A media without tags is visible to all authenticated users
-            if not self.tags.all().exists():
+            if not tags:
                 return True
         return False
 

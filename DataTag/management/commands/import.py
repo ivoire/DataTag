@@ -40,6 +40,23 @@ class Command(BaseCommand):
     help = 'Synchronize the file system with the database'
     option_list = BaseCommand.option_list
 
+    def create_tag(self, tag_conf, root_conf):
+        tag = Tag(name=tag_conf.name, is_public=tag_conf.public,
+                  is_root=tag_conf.root)
+        tag.save()
+
+        # Add groups
+        if tag_conf.groups:
+            group_list = tag_conf.groups
+        else:
+            group_list = root_conf.default_groups
+
+        for group in group_list:
+            self.stdout.write("   - %s" % (group))
+            tag.groups.add(Group.objects.get(name=group))
+
+        return tag
+
     @transaction.atomic
     def handle(self, *args, **kwargs):
         # Are we importing all medias or only a sub-directory
@@ -48,8 +65,13 @@ class Command(BaseCommand):
             root_conf = Configuration()
             root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
             tags = {}
+            self.stdout.write("Importing new tags if needed")
             for tag_conf in root_conf.tags:
-                tag = Tag.objects.get(name=tag_conf.name)
+                try:
+                    tag = Tag.objects.get(name=tag_conf.name)
+                except Tag.DoesNotExist:
+                    self.stdout.write(" - %s" % (tag_conf.name))
+                    tag = self.create_tag(tag_conf, root_conf)
                 tags[tag_conf.name] = tag
         else:
             self.stdout.write("Removing old data")
@@ -64,20 +86,7 @@ class Command(BaseCommand):
             tags = {}
             for tag_conf in root_conf.tags:
                 self.stdout.write(" - %s" % (tag_conf.name))
-                tag = Tag(name=tag_conf.name, is_public=tag_conf.public,
-                          is_root=tag_conf.root)
-                tag.save()
-                # Add groups
-                if tag_conf.groups:
-                    group_list = tag_conf.groups
-                else:
-                    group_list = root_conf.default_groups
-
-                for group in group_list:
-                    self.stdout.write("   - %s" % (group))
-                    tag.groups.add(Group.objects.get(name=group))
-
-                tags[tag_conf.name] = tag
+                tags[tag_conf.name] = self.create_tag(tag_conf, root_conf)
 
         # TODO: add a specific option for this
         tz = pytz.timezone(settings.TIME_ZONE)

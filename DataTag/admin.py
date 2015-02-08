@@ -29,6 +29,7 @@ class MediaAdmin(admin.ModelAdmin):
     list_display = ('path_short', 'tag_list', 'size', 'date')
     list_filter = ('tags',)
     filter_horizontal = ('tags',)
+    ordering = ('path',)
     search_fields = ('path',)
 
     def path_short(self, obj):
@@ -45,6 +46,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'group_list', 'is_public', 'is_root')
     list_filter = ('groups',)
     filter_horizontal = ('groups',)
+    ordering = ('name',)
 
     def group_list(self, obj):
         return "|".join([tag.name for tag in obj.groups.all()])

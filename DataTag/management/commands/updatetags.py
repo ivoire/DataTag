@@ -61,7 +61,11 @@ class Command(BaseCommand):
 
             for group in group_list:
                 self.stdout.write("   - %s" % (group))
-                tag.groups.add(Group.objects.get(name=group))
+                try:
+                    tag.groups.add(Group.objects.get(name=group))
+                except Group.DoesNotExist:
+                    self.stderr.write("Group '%s' does not exists" % group)
+                    return
 
             tags[tag_conf.name] = tag
 
@@ -89,8 +93,13 @@ class Command(BaseCommand):
                 path = os.path.join(root, filename)
                 self.stdout.write("%s" % path)
 
-                # Read EXIF data
-                media = Media.objects.get(path=path)
+                # Add tags to file that matches
+                try:
+                    media = Media.objects.get(path=path)
+                except Media.DoesNotExist:
+                    self.stderr.write("Media '%s' does not exists" % path)
+                    return
+
                 for media_conf in local_conf.medias:
                     if fnmatch.fnmatchcase(filename, media_conf.pattern):
                         media.tags.add(*[tags[tag_name] for tag_name in media_conf.tags])

@@ -48,7 +48,10 @@ class Configuration(object):
             with open(filename, 'r') as fin:
                 y_conf = yaml.load(fin)
                 for media in y_conf.get('medias', []):
-                    self.medias.append(MediaConf(media['pattern'],
+                    pattern = media['pattern']
+                    if not isinstance(pattern, list):
+                        pattern = [pattern]
+                    self.medias.append(MediaConf(pattern,
                                                  media['tags']))
                 for tag in y_conf.get('tags', []):
                     self.tags.append(TagConf(tag['name'],

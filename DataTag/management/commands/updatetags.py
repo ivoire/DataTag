@@ -101,5 +101,6 @@ class Command(BaseCommand):
                     return
 
                 for media_conf in local_conf.medias:
-                    if fnmatch.fnmatchcase(filename, media_conf.pattern):
-                        media.tags.add(*[tags[tag_name] for tag_name in media_conf.tags])
+                    for pattern in media_conf.pattern:
+                        if fnmatch.fnmatchcase(filename, pattern):
+                            media.tags.add(*[tags[tag_name] for tag_name in media_conf.tags])

@@ -30,7 +30,7 @@
 <div class="row">
   {% endif %}
   <div class="col-xs-3 col-md-3">
-    <a href="{{ media.get_absolute_url }}?size=medium" data-lightbox="current_tag" class="thumbnail"><img class="lazy" data-original="{{ media.get_absolute_url }}?size=small" /></a>
+    <a href="{{ media.get_absolute_url }}?size=medium" data-lightbox="current_tag" data-title="&lt;a href='{{ media.get_absolute_url }}'&gt;{{ media.basename }}&lt;/a&gt;" class="thumbnail"><img class="lazy" data-original="{{ media.get_absolute_url }}?size=small" /></a>
   </div>
 {% endfor %}
 </div>

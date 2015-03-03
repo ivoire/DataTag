@@ -25,6 +25,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
+import os
+
 
 @python_2_unicode_compatible
 class Media(models.Model):
@@ -68,6 +70,9 @@ class Media(models.Model):
             if not tags:
                 return True
         return False
+
+    def basename(self):
+        return os.path.basename(self.path)
 
 
 @python_2_unicode_compatible

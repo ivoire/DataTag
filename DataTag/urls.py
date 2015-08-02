@@ -19,39 +19,36 @@
 
 from __future__ import unicode_literals
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from django.contrib.auth import views as v_auth
 from django.core.urlresolvers import reverse_lazy
 
+from DataTag.views import account as v_account
+from DataTag.views import main as v_main
+from DataTag.views import media as v_media
+from DataTag.views import tag as v_tag
 from DataTag.views.account import DTAuthenticationForm, DTPasswordChangeForm
 
-# Main view
-urlpatterns = patterns('DataTag.views.main',
-    url(r'^$', 'index', name='index'),
-)
+urlpatterns = [
+    # Main view
+    url(r'^$', v_main.index, name='index'),
 
-# Authentication
-urlpatterns += patterns('django.contrib.auth.views',
-    url(r'^accounts/login/$', 'login', {'template_name': 'DataTag/account/login.html', 'authentication_form': DTAuthenticationForm}, name='accounts.login'),
-    url(r'^accounts/logout/$', 'logout', {'template_name': 'DataTag/account/logged_out.html'}, name='accounts.logout'),
-    url(r'^accounts/password/change/$', 'password_change', {'template_name': 'DataTag/account/password_change.html', 'password_change_form': DTPasswordChangeForm, 'post_change_redirect': reverse_lazy('accounts.password_change_done')}, name='accounts.password_change'),
-)
+    # Authentication
+    url(r'^accounts/login/$', v_auth.login, {'template_name': 'DataTag/account/login.html', 'authentication_form': DTAuthenticationForm}, name='accounts.login'),
+    url(r'^accounts/logout/$', v_auth.logout, {'template_name': 'DataTag/account/logged_out.html'}, name='accounts.logout'),
+    url(r'^accounts/password/change/$', v_auth.password_change, {'template_name': 'DataTag/account/password_change.html', 'password_change_form': DTPasswordChangeForm, 'post_change_redirect': reverse_lazy('accounts.password_change_done')}, name='accounts.password_change'),
 
-# Account
-urlpatterns += patterns('DataTag.views.account',
-    url(r'^accounts/register/$', 'register', name='accounts.register'),
-    url(r'^accounts/profile/$', 'profile', name='accounts.profile'),
-    url(r'^accounts/profile/update/$', 'update', name='accounts.profile.update'),
-    url(r'^accounts/password/change/done/$', 'password_change_done', name='accounts.password_change_done'),
-)
+    # Account
+    url(r'^accounts/register/$', v_account.register, name='accounts.register'),
+    url(r'^accounts/profile/$', v_account.profile, name='accounts.profile'),
+    url(r'^accounts/profile/update/$', v_account.update, name='accounts.profile.update'),
+    url(r'^accounts/password/change/done/$', v_account.password_change_done, name='accounts.password_change_done'),
 
-# Medias
-urlpatterns += patterns('DataTag.views.media',
-    url(r'^medias/(?P<path>.*$)', 'media', name='media'),
-)
+    # Medias
+    url(r'^medias/(?P<path>.*$)', v_media.media, name='media'),
 
-# Tags
-urlpatterns += patterns('DataTag.views.tag',
-    url(r'^tags(?P<path>/.+)/$', 'details', name='tags.details'),
-    url(r'^browse/$', 'browse', {'path': ''}, name='tags.browse.root'),
-    url(r'^browse(?P<path>/.*)/$', 'browse', name='tags.browse'),
-)
+    # Tags
+    url(r'^tags(?P<path>/.+)/$', v_tag.details, name='tags.details'),
+    url(r'^browse/$', v_tag.browse, {'path': ''}, name='tags.browse.root'),
+    url(r'^browse(?P<path>/.*)/$', v_tag.browse, name='tags.browse'),
+]

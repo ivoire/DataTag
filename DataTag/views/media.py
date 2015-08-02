@@ -31,7 +31,7 @@ import mimetypes
 import os
 
 
-def media(request, path):
+def get_media(request, path):
     pathname = os.path.join(settings.MEDIA_ROOT, path)
     # Get the Media and check the permissions
     media = get_object_or_404(Media, path=pathname)

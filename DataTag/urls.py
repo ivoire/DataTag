@@ -45,7 +45,7 @@ urlpatterns = [
     url(r'^accounts/password/change/done/$', v_account.password_change_done, name='accounts.password_change_done'),
 
     # Medias
-    url(r'^medias/(?P<path>.*$)', v_media.media, name='media'),
+    url(r'^medias/(?P<path>.*$)', v_media.get_media, name='media'),
 
     # Tags
     url(r'^tags(?P<path>/.+)/$', v_tag.details, name='tags.details'),

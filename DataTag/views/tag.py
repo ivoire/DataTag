@@ -20,6 +20,8 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
+from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect, render_to_response
@@ -52,7 +54,13 @@ def browse(request, path):
         query_string = query_string + '/' + tag_name
         tag = get_object_or_404(Tag, name=tag_name)
         if not tag.is_visible_to(request.user):
-            return HttpResponseForbidden()
+            # If the user is not logged-in, redirect to the login page
+            if not request.user.is_authenticated():
+                return redirect_to_login(request.get_full_path(),
+                                         settings.LOGIN_URL,
+                                         REDIRECT_FIELD_NAME)
+            else:
+                return HttpResponseForbidden()
         tags.append({'obj': tag, 'path': query_string})
         medias = medias.filter(tags=tag)
 

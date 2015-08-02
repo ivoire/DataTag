@@ -42,7 +42,7 @@ def mkdir(path):
 
 def load_exif(filename):
     try:
-        out = subprocess.check_output(['exiftool', '-j', filename],
+        out = subprocess.check_output(['exiftool', '-fast2', '-j', filename],
                                       stderr=subprocess.STDOUT,
                                       universal_newlines=True)
     except (OSError, subprocess.CalledProcessError):

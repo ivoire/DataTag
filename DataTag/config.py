@@ -23,9 +23,10 @@ import yaml
 
 
 class MediaConf(object):
-    def __init__(self, pattern, tags):
+    def __init__(self, pattern, tags, description):
         self.pattern = pattern
         self.tags = tags
+        self.description = description
 
 
 class TagConf(object):
@@ -52,7 +53,8 @@ class Configuration(object):
                     if not isinstance(pattern, list):
                         pattern = [pattern]
                     self.medias.append(MediaConf(pattern,
-                                                 media['tags']))
+                                                 media.get('tags', []),
+                                                 media.get('description', None)))
                 for tag in y_conf.get('tags', []):
                     self.tags.append(TagConf(tag['name'],
                                              set(tag.get('groups', [])),
@@ -75,11 +77,19 @@ class Configuration(object):
         return set([tag.name for tag in self.tags])
 
     def dump(self, filename):
-        # Transform into a dict of list of dicts
         medias = []
         tags = []
+
+        # Create the list of media dicts
         for media in self.medias:
-            medias.append({'pattern': media.pattern, 'tags': media.tags})
+            new_media = {'pattern': media.pattern}
+            if media.tags:
+                new_media['tags'] = media.tags
+            if media.description:
+                new_media['description'] = media.description
+            medias.append(new_media)
+
+        # Create the list of tags dict
         for tag in self.tags:
             new_tag = {'name': tag.name}
             if tag.groups:
@@ -89,16 +99,19 @@ class Configuration(object):
             if tag.root:
                 new_tag['root'] = True
             tags.append(new_tag)
+
+        # Create the final dict
+        to_dump = {}
+        if medias:
+            to_dump['medias'] = medias
+        if tags:
+            to_dump['tags'] = tags
+        if self.exclude:
+            to_dump['exclude'] = self.exclude
+        if self.default_groups:
+            to_dump['defaults'] = dict()
+            to_dump['defaults']['groups'] = self.default_groups
+
         with open(filename, 'w') as fout:
-            to_dump = {}
-            if medias:
-                to_dump['medias'] = medias
-            if tags:
-                to_dump['tags'] = tags
-            if self.exclude:
-                to_dump['exclude'] = self.exclude
-            if self.default_groups:
-                to_dump['defaults'] = dict()
-                to_dump['defaults']['groups'] = self.default_groups
             yaml.dump(to_dump, fout,
                       default_flow_style=False, default_style=None, indent=1)

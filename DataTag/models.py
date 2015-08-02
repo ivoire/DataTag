@@ -36,6 +36,7 @@ class Media(models.Model):
     width = models.IntegerField()
     height = models.IntegerField()
     date = models.DateTimeField()
+    description = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
         base_length = len(settings.MEDIA_ROOT)

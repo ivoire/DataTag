@@ -39,8 +39,7 @@ class Media(models.Model):
 
     def __str__(self):
         base_length = len(settings.MEDIA_ROOT)
-        tags_str = ', '.join([tag.name for tag in self.tags.all()])
-        return "%s: %s" % (self.path[base_length+1:], tags_str)
+        return "%s" % (self.path[base_length+1:])
 
     def get_absolute_url(self):
         base_length = len(settings.MEDIA_ROOT)

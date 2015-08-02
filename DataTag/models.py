@@ -30,7 +30,7 @@ import os
 
 @python_2_unicode_compatible
 class Media(models.Model):
-    tags = models.ManyToManyField('Tag', blank=True, null=True)
+    tags = models.ManyToManyField('Tag', blank=True)
     path = models.FilePathField(path=settings.MEDIA_ROOT, recursive=True,
                                 max_length=256, db_index=True)
     width = models.IntegerField()
@@ -78,7 +78,7 @@ class Media(models.Model):
 class Tag(models.Model):
     # TODO: name should be unique !
     name = models.CharField(max_length=128, db_index=True)
-    groups = models.ManyToManyField(Group, blank=True, null=True)
+    groups = models.ManyToManyField(Group, blank=True)
     is_public = models.BooleanField(default=False)
     is_root = models.BooleanField(default=False)
 

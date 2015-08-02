@@ -76,7 +76,7 @@ class Configuration(object):
         return tags
 
     def tag_set(self):
-        return self.tags.keys()
+        return set(self.tags.keys())
 
     def dump(self, filename):
         medias = []

@@ -47,18 +47,17 @@ class Command(BaseCommand):
         root_conf = Configuration()
         root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
+        # Load all the tags
         tags = {}
-        for tag_conf in root_conf.tags:
-            self.stdout.write(" - %s" % (tag_conf.name))
-            tag = Tag(name=tag_conf.name, is_public=tag_conf.public,
-                      is_root=tag_conf.root)
+        for tag_name in root_conf.tags:
+            current_tag = root_conf.tags[tag_name]
+            self.stdout.write(" - %s" % (tag_name))
+            tag = Tag(name=current_tag.name, is_public=current_tag.public,
+                      is_root=current_tag.root)
             tag.save()
-            # Add groups
-            if tag_conf.groups:
-                group_list = tag_conf.groups
-            else:
-                group_list = root_conf.default_groups
 
+            # Add groups
+            group_list = current_tag.groups if current_tag.groups else root_conf.default_groups
             for group in group_list:
                 self.stdout.write("   - %s" % (group))
                 try:
@@ -67,7 +66,8 @@ class Command(BaseCommand):
                     self.stderr.write("Group '%s' does not exists" % group)
                     return
 
-            tags[tag_conf.name] = tag
+            # Store all loaded tags
+            tags[tag_name] = tag
 
         self.stdout.write("Updating the Media")
         for root, _, files in os.walk(settings.MEDIA_ROOT,

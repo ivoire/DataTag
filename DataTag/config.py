@@ -40,7 +40,7 @@ class TagConf(object):
 class Configuration(object):
     def __init__(self):
         self.medias = []
-        self.tags = []
+        self.tags = {}
         self.exclude = []
         self.default_groups = []
 
@@ -55,11 +55,13 @@ class Configuration(object):
                     self.medias.append(MediaConf(pattern,
                                                  media.get('tags', []),
                                                  media.get('description', None)))
-                for tag in y_conf.get('tags', []):
-                    self.tags.append(TagConf(tag['name'],
+                tags = y_conf.get('tags', {})
+                for tag_name in tags:
+                    tag = tags[tag_name]
+                    self.tags[tag_name] = TagConf(tag_name,
                                              set(tag.get('groups', [])),
                                              tag.get('public', False),
-                                             tag.get('root', False)))
+                                             tag.get('root', False))
                 for exclude in y_conf.get('exclude', []):
                     self.exclude.append(exclude)
                 for group_name in y_conf.get('defaults', {}).get('groups', []):
@@ -74,11 +76,11 @@ class Configuration(object):
         return tags
 
     def tag_set(self):
-        return set([tag.name for tag in self.tags])
+        return self.tags.keys()
 
     def dump(self, filename):
         medias = []
-        tags = []
+        tags = {}
 
         # Create the list of media dicts
         for media in self.medias:
@@ -90,15 +92,16 @@ class Configuration(object):
             medias.append(new_media)
 
         # Create the list of tags dict
-        for tag in self.tags:
-            new_tag = {'name': tag.name}
+        for tag_name in self.tags:
+            tag = self.tags[tag_name]
+            tags[tag.name] = {}
+
             if tag.groups:
-                new_tag['groups'] = list(tag.groups)
+                tags[tag.name]['groups'] = list(tag.groups)
             if tag.public:
-                new_tag['public'] = True
+                tags[tag.name]['public'] = True
             if tag.root:
-                new_tag['root'] = True
-            tags.append(new_tag)
+                tags[tag.name]['root'] = True
 
         # Create the final dict
         to_dump = {}

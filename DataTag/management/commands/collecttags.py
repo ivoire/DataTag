@@ -57,7 +57,7 @@ class Command(BaseCommand):
             self.stdout.write("===================")
             for tag in missing_tags:
                 self.stdout.write(" - %s" % (tag))
-                root_conf.tags.append(TagConf(tag, set(), False, False))
+                root_conf.tags[tag] = TagConf(tag, set(), False, False)
             root_conf.dump(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
         else:
             self.stdout.write("No missing tags")

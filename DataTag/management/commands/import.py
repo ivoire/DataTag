@@ -66,7 +66,8 @@ class Command(BaseCommand):
             root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
             tags = {}
             self.stdout.write("Importing new tags if needed")
-            for tag_conf in root_conf.tags:
+            for tag_name in root_conf.tags:
+                tag_conf = root_conf.tags[tag_name]
                 try:
                     tag = Tag.objects.get(name=tag_conf.name)
                 except Tag.DoesNotExist:
@@ -84,7 +85,8 @@ class Command(BaseCommand):
             root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
             tags = {}
-            for tag_conf in root_conf.tags:
+            for tag_name in root_conf.tags:
+                tag_conf = root_conf.tags[tag_name]
                 self.stdout.write(" - %s" % (tag_conf.name))
                 tags[tag_conf.name] = self.create_tag(tag_conf, root_conf)
 

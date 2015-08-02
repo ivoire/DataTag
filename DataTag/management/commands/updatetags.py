@@ -103,4 +103,8 @@ class Command(BaseCommand):
                 for media_conf in local_conf.medias:
                     for pattern in media_conf.pattern:
                         if fnmatch.fnmatchcase(filename, pattern):
-                            media.tags.add(*[tags[tag_name] for tag_name in media_conf.tags])
+                            if media_conf.tags:
+                                media.tags.add(*[tags[tag_name] for tag_name in media_conf.tags])
+                            if media_conf.description:
+                                media.description = media_conf.description
+                                media.save()

@@ -52,7 +52,9 @@ class Command(BaseCommand):
         for tag_name in root_conf.tags:
             current_tag = root_conf.tags[tag_name]
             self.stdout.write(" - %s" % (tag_name))
-            tag = Tag(name=current_tag.name, is_public=current_tag.public,
+            tag = Tag(name=current_tag.name,
+                      description=current_tag.description,
+                      is_public=current_tag.public,
                       is_root=current_tag.root)
             tag.save()
 

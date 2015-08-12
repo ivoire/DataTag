@@ -30,8 +30,9 @@ class MediaConf(object):
 
 
 class TagConf(object):
-    def __init__(self, name, groups, public, root):
+    def __init__(self, name, description, groups, public, root):
         self.name = name
+        self.description = description
         self.groups = groups
         self.public = public
         self.root = root
@@ -59,6 +60,7 @@ class Configuration(object):
                 for tag_name in tags:
                     tag = tags[tag_name]
                     self.tags[tag_name] = TagConf(tag_name,
+                                             tag.get('description', None),
                                              set(tag.get('groups', [])),
                                              tag.get('public', False),
                                              tag.get('root', False))
@@ -96,6 +98,8 @@ class Configuration(object):
             tag = self.tags[tag_name]
             tags[tag.name] = {}
 
+            if tag.description:
+                tags[tag.name]['description'] = tag.description
             if tag.groups:
                 tags[tag.name]['groups'] = list(tag.groups)
             if tag.public:

@@ -23,6 +23,12 @@
 {% endblock %}
 
 {% block body %}
+{% if tags|length == 1 and tags.0.obj.description %}
+<div class="alert alert-info">
+  <p>{{ tags.0.obj.description }}</p>
+</div>
+{% endif %}
+
 <div class="row">
 {% for media in medias %}
   {% if forloop.counter0|divisibleby:"4" and not forloop.first %}

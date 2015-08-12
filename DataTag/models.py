@@ -79,6 +79,7 @@ class Media(models.Model):
 class Tag(models.Model):
     # TODO: name should be unique !
     name = models.CharField(max_length=128, db_index=True)
+    description = models.CharField(max_length=1024, blank=True, null=True)
     groups = models.ManyToManyField(Group, blank=True)
     is_public = models.BooleanField(default=False)
     is_root = models.BooleanField(default=False)

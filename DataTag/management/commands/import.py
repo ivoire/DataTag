@@ -41,8 +41,8 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list
 
     def create_tag(self, tag_conf, root_conf):
-        tag = Tag(name=tag_conf.name, is_public=tag_conf.public,
-                  is_root=tag_conf.root)
+        tag = Tag(name=tag_conf.name, desription=tag_conf.description,
+                  is_public=tag_conf.public, is_root=tag_conf.root)
         tag.save()
 
         # Add groups

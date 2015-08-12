@@ -60,10 +60,10 @@ class Configuration(object):
                 for tag_name in tags:
                     tag = tags[tag_name]
                     self.tags[tag_name] = TagConf(tag_name,
-                                             tag.get('description', None),
-                                             set(tag.get('groups', [])),
-                                             tag.get('public', False),
-                                             tag.get('root', False))
+                                                  tag.get('description', None),
+                                                  set(tag.get('groups', [])),
+                                                  tag.get('public', False),
+                                                  tag.get('root', False))
                 for exclude in y_conf.get('exclude', []):
                     self.exclude.append(exclude)
                 for group_name in y_conf.get('defaults', {}).get('groups', []):

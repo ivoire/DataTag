@@ -21,6 +21,8 @@ from __future__ import unicode_literals
 
 from django.core.servers.basehttp import FileWrapper
 from django.conf import settings
+from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import Http404, HttpResponseForbidden, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -36,7 +38,13 @@ def get_media(request, path):
     # Get the Media and check the permissions
     media = get_object_or_404(Media, path=pathname)
     if not media.is_visible_to(request.user):
-        return HttpResponseForbidden()
+        # If the user is not logged-in, redirect to the login page
+        if not request.user.is_authenticated():
+            return redirect_to_login(request.get_full_path(),
+                                     settings.LOGIN_URL,
+                                     REDIRECT_FIELD_NAME)
+        else:
+            return HttpResponseForbidden()
 
     # Get a thumbnails if requested
     size_str = request.GET.get('size', None)

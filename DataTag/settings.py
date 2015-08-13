@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with DataTag.  If not, see <http://www.gnu.org/licenses/>
 
+from __future__ import unicode_literals
+
 from django.contrib.messages import constants as message_constants
 
 # Accounts related urls

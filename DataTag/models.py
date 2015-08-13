@@ -77,8 +77,7 @@ class Media(models.Model):
 
 @python_2_unicode_compatible
 class Tag(models.Model):
-    # TODO: name should be unique !
-    name = models.CharField(max_length=128, db_index=True)
+    name = models.CharField(max_length=128, db_index=True, unique=True)
     description = models.CharField(max_length=1024, blank=True, null=True)
     groups = models.ManyToManyField(Group, blank=True)
     is_public = models.BooleanField(default=False)

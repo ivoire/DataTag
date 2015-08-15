@@ -76,10 +76,20 @@ class Media(models.Model):
 
 
 @python_2_unicode_compatible
+class Category(models.Model):
+    name = models.CharField(max_length=128, db_index=True, unique=True)
+    description = models.CharField(max_length=1024, blank=True, null=True)
+
+    def __str__(self):
+        return "%s" % (self.name)
+
+
+@python_2_unicode_compatible
 class Tag(models.Model):
     name = models.CharField(max_length=128, db_index=True, unique=True)
     description = models.CharField(max_length=1024, blank=True, null=True)
     groups = models.ManyToManyField(Group, blank=True)
+    category = models.ForeignKey(Category, blank=True, null=True, default=None)
     is_public = models.BooleanField(default=False)
     is_root = models.BooleanField(default=False)
 

@@ -22,7 +22,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib import admin
 
-from DataTag.models import Media, Tag
+from DataTag.models import Category, Media, Tag
 
 
 class MediaAdmin(admin.ModelAdmin):
@@ -51,5 +51,7 @@ class TagAdmin(admin.ModelAdmin):
     def group_list(self, obj):
         return "|".join([tag.name for tag in obj.groups.all()])
 
+
+admin.site.register(Category)
 admin.site.register(Media, MediaAdmin)
 admin.site.register(Tag, TagAdmin)

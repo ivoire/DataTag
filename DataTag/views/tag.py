@@ -40,9 +40,9 @@ def browse(request, path):
     medias = Media.objects.all()
     query_string = ''
     tags = []
-    root_tags = []
-    non_root_tags = []
-    sub_tags = []
+    cat_tags = []
+    non_cat_tags = []
+    all_tags = []
 
     # Skip too long requests
     # TODO: should be a setting
@@ -74,20 +74,20 @@ def browse(request, path):
             obj = {'obj': tag, 'count': count,
                    'path': (query_string + '/' + tag.name),
                    'thumbnail': local_medias.order_by('?')[0]}
-            if tag.is_root:
-                root_tags.insert(0, obj)
+            if tag.category:
+                cat_tags.append(obj)
             else:
-                non_root_tags.append(obj)
-            sub_tags.append(obj)
+                non_cat_tags.append(obj)
+            all_tags.append(obj)
 
     # If their is not tags to show, redirect to tag details
-    if not root_tags and not non_root_tags and path:
+    if not all_tags and path:
         return redirect(reverse('tags.details', args=[path]))
 
     return render_to_response('DataTag/tag/browse.html',
-                              {'tags': tags, 'root_tags': root_tags,
-                               'non_root_tags': non_root_tags,
-                               'sub_tags': sub_tags},
+                              {'tags': tags, 'cat_tags': cat_tags,
+                               'non_cat_tags': non_cat_tags,
+                               'all_tags': all_tags},
                               context_instance=RequestContext(request))
 
 

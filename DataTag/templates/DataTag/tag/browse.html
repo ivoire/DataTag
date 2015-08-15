@@ -30,16 +30,15 @@
 {% block body %}
 <div role="tabpanel">
   <ul role="tablist" class="nav nav-tabs">
-    <li role="presentation"{% if root_tags %} class="active"{% endif %}><a href="#Root" aria-controls="Root" role="tab" data-toggle="tab">{% trans "Root" %}</a></li>
-    <li role="presentation"{% if not root_tags %} class="active"{% endif %}><a href="#Leaf" aria-controls="Leaf" role="tab" data-toggle="tab">{% trans "Leaf" %}</a></li>
+    <li role="presentation" class="active"><a href="#NonCat" aria-controls="NonCat" role="tab" data-toggle="tab">{% trans "Tags" %}</a></li>
+    <li role="presentation"><a href="#Cat" aria-controls="Cat" role="tab" data-toggle="tab">{% trans "Categories" %}</a></li>
     <li role="presentation"><a href="#AllTags" aria-controls="AllTags" role="tab" data-toggle="tab">{% trans "All" %}</a></li>
-    <li role="presentation"><a href="#Cloud" aria-controls="Cloud" role="tab" data-toggle="tab">{% trans "Cloud" %}</a></li>
   </ul>
 
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane{% if root_tags %} active{% endif %}" id="Root">
+    <div role="tabpanel" class="tab-pane active" id="NonCat">
       <div class="row">
-        {% for tag in root_tags %}
+        {% for tag in non_cat_tags %}
         {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
       </div>
       <div class="row">
@@ -58,9 +57,9 @@
       </div>
     </div>
 
-    <div role="tabpanel" class="tab-pane{% if not root_tags %} active{% endif %}" id="Leaf">
+    <div role="tabpanel" class="tab-pane" id="Cat">
       <div class="row">
-        {% for tag in non_root_tags %}
+        {% for tag in cat_tags %}
         {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
       </div>
       <div class="row">
@@ -81,7 +80,7 @@
 
     <div role="tabpanel" class="tab-pane" id="AllTags">
       <div class="row">
-        {% for tag in sub_tags %}
+        {% for tag in all_tags %}
         {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
       </div>
       <div class="row">
@@ -99,29 +98,6 @@
         {% endfor %}
       </div>
     </div>
-    <div role="tabpanel" class="tab-pane" id="Cloud">
-      <div class="row">
-        <div class="col-md-12" id="tagcloud">
-        {% for tag in sub_tags %}
-          <a href="{% url 'tags.details' tag.path %}" rel="{{ tag.count }}">{{ tag.obj.name }}</a>
-        {% endfor %}
-        </div>
-      </div>
-    </div>
   </div>
 </div>
-{% endblock %}
-
-{% block script %}
-<script src="{% get_static_prefix %}DataTag/js/tagcloud-h5c3040c.js"></script>
-<script>
-$.fn.tagcloud.defaults = {
-  size: {start: 14, end: 50, unit: 'pt'},
-  color: {start: '#abd', end: '#f52'}
-};
-
-$(function () {
-  $('#tagcloud a').tagcloud();
-});
-</script>
 {% endblock %}

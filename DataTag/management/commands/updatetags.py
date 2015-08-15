@@ -25,7 +25,7 @@ from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from DataTag.models import Media, Tag
+from DataTag.models import Category, Media, Tag
 from DataTag.config import Configuration
 from DataTag.utils import load_exif
 
@@ -40,13 +40,29 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **kwargs):
+        self.stdout.write("Removing old categories")
+        Category.objects.all().delete()
         self.stdout.write("Removing old tags")
         Tag.objects.all().delete()
 
-        self.stdout.write("Importing Tags...")
+        self.stdout.write("Loading root configuration")
         root_conf = Configuration()
         root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
 
+        self.stdout.write("Importing Categories...")
+        # Create the dictionnay with a None key. This allows to have the same
+        # code when a tag does not have any category.
+        categories = {None: None}
+        for category_name in root_conf.categories:
+            current_category = root_conf.categories[category_name]
+            self.stdout.write(" - %s" % (category_name))
+            cat = Category(name=current_category.name,
+                           description=current_category.description)
+            cat.save()
+            # Keep all loaded category objects
+            categories[category_name] = cat
+
+        self.stdout.write("Importing Tags...")
         # Load all the tags
         tags = {}
         for tag_name in root_conf.tags:
@@ -54,6 +70,7 @@ class Command(BaseCommand):
             self.stdout.write(" - %s" % (tag_name))
             tag = Tag(name=current_tag.name,
                       description=current_tag.description,
+                      category=categories[current_tag.category],
                       is_public=current_tag.public,
                       is_root=current_tag.root)
             tag.save()

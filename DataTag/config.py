@@ -22,6 +22,12 @@ from __future__ import unicode_literals
 import yaml
 
 
+class CategoryConf(object):
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+
 class MediaConf(object):
     def __init__(self, pattern, tags, description):
         self.pattern = pattern
@@ -30,10 +36,11 @@ class MediaConf(object):
 
 
 class TagConf(object):
-    def __init__(self, name, description, groups, public, root):
+    def __init__(self, name, description, groups, category, public, root):
         self.name = name
         self.description = description
         self.groups = groups
+        self.category = category
         self.public = public
         self.root = root
 
@@ -42,13 +49,17 @@ class Configuration(object):
     def __init__(self):
         self.medias = []
         self.tags = {}
+        self.categories = {}
         self.exclude = []
         self.default_groups = []
 
     def load(self, filename):
         try:
+            # Load the configuration file
             with open(filename, 'r') as fin:
                 y_conf = yaml.load(fin)
+
+                # Load the medias
                 for media in y_conf.get('medias', []):
                     pattern = media['pattern']
                     if not isinstance(pattern, list):
@@ -56,14 +67,24 @@ class Configuration(object):
                     self.medias.append(MediaConf(pattern,
                                                  media.get('tags', []),
                                                  media.get('description', None)))
+                # Load the tags
                 tags = y_conf.get('tags', {})
                 for tag_name in tags:
                     tag = tags[tag_name]
                     self.tags[tag_name] = TagConf(tag_name,
                                                   tag.get('description', None),
                                                   set(tag.get('groups', [])),
+                                                  tag.get('category', None),
                                                   tag.get('public', False),
                                                   tag.get('root', False))
+                # Load categories
+                categories = y_conf.get('categories', {})
+                for category_name in categories:
+                    category = categories[category_name]
+                    self.categories[category_name] = CategoryConf(
+                                                        category_name,
+                                                        category.get('description', None))
+                # Load excludes and default groups
                 for exclude in y_conf.get('exclude', []):
                     self.exclude.append(exclude)
                 for group_name in y_conf.get('defaults', {}).get('groups', []):
@@ -102,6 +123,8 @@ class Configuration(object):
                 tags[tag.name]['description'] = tag.description
             if tag.groups:
                 tags[tag.name]['groups'] = list(tag.groups)
+            if tag.category:
+                tags[tag.name]['category'] = tag.category
             if tag.public:
                 tags[tag.name]['public'] = True
             if tag.root:
@@ -118,6 +141,8 @@ class Configuration(object):
         if self.default_groups:
             to_dump['defaults'] = dict()
             to_dump['defaults']['groups'] = self.default_groups
+
+        # TODO: dump the categories
 
         with open(filename, 'w') as fout:
             yaml.dump(to_dump, fout,

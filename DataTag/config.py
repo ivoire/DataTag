@@ -104,6 +104,7 @@ class Configuration(object):
     def dump(self, filename):
         medias = []
         tags = {}
+        categories = {}
 
         # Create the list of media dicts
         for media in self.medias:
@@ -113,6 +114,13 @@ class Configuration(object):
             if media.description:
                 new_media['description'] = media.description
             medias.append(new_media)
+
+        # Create the list of categories
+        for cat_name in self.categories:
+            cat = self.categories[cat_name]
+            categories[cat_name] = {}
+            if cat.description:
+                categories[cat_name]['description'] = cat.description
 
         # Create the list of tags dict
         for tag_name in self.tags:
@@ -134,6 +142,8 @@ class Configuration(object):
         to_dump = {}
         if medias:
             to_dump['medias'] = medias
+        if categories:
+            to_dump['categories'] = categories
         if tags:
             to_dump['tags'] = tags
         if self.exclude:
@@ -141,8 +151,6 @@ class Configuration(object):
         if self.default_groups:
             to_dump['defaults'] = dict()
             to_dump['defaults']['groups'] = self.default_groups
-
-        # TODO: dump the categories
 
         with open(filename, 'w') as fout:
             yaml.dump(to_dump, fout,

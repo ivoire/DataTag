@@ -97,7 +97,7 @@ class Tag(models.Model):
         return "%s" % (self.name)
 
     def get_absolute_url(self):
-        return reverse('tags.details', args=[self.name])
+        return reverse('tags.details', args=['/' + self.name])
 
     def is_visible_to(self, user):
         """

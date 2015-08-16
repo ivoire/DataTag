@@ -24,6 +24,7 @@ from django.contrib.auth import views as v_auth
 from django.core.urlresolvers import reverse_lazy
 
 from DataTag.views import account as v_account
+from DataTag.views import category as v_category
 from DataTag.views import main as v_main
 from DataTag.views import media as v_media
 from DataTag.views import tag as v_tag
@@ -51,4 +52,7 @@ urlpatterns = [
     url(r'^tags(?P<path>/.+)/$', v_tag.details, name='tags.details'),
     url(r'^browse/$', v_tag.browse, {'path': ''}, name='tags.browse.root'),
     url(r'^browse(?P<path>/.*)/$', v_tag.browse, name='tags.browse'),
+
+    # Categories
+    url(r'^categories/(?P<name>[^/]+)/$', v_category.details, name='categories.details'),
 ]

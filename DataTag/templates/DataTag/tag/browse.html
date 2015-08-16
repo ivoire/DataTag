@@ -59,18 +59,15 @@
 
     <div role="tabpanel" class="tab-pane" id="Cat">
       <div class="row">
-        {% for tag in cat_tags %}
+        {% for cat in cats %}
         {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
       </div>
       <div class="row">
         {% endif %}
         <div class="col-xs-3 col-md-3">
           <div class="thumbnail">
-            <a href="{% url 'tags.details' tag.path %}"{% if tag.obj.description %} title="{{ tag.obj.description }}"{% endif %}><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
-            <div class="caption"><a href="{% url 'tags.browse' tag.path %}">{{ tag.obj.name|truncatechars:25 }}</a>
-              <div class="pull-right">
-                <span class="badge">{{ tag.count }} <span class="glyphicon glyphicon-eye-open"></span></span>
-              </div>
+            <a href="{% url 'categories.details' cat.obj.name %}"{% if cat.obj.description %} title="{{ cat.obj.description }}"{% endif %}><img src="{{ cat.thumbnail.get_absolute_url }}?size=small" /></a>
+            <div class="caption"><a href="{% url 'categories.details' cat.obj.name %}">{{ cat.obj.name|truncatechars:25 }}</a>
             </div>
           </div>
         </div>

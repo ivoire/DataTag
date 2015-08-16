@@ -40,7 +40,8 @@ def browse(request, path):
     medias = Media.objects.all()
     query_string = ''
     tags = []
-    cat_tags = []
+    cats = []
+    categories = {}
     non_cat_tags = []
     all_tags = []
 
@@ -68,14 +69,22 @@ def browse(request, path):
     for tag in Tag.objects.exclude(pk__in=[tag['obj'].pk for tag in tags]).prefetch_related('groups').order_by('-name'):
         if not tag.is_visible_to(request.user):
             continue
+
         local_medias = medias.filter(tags=tag)
         count = local_medias.count()
         if count:
             obj = {'obj': tag, 'count': count,
                    'path': (query_string + '/' + tag.name),
                    'thumbnail': local_medias.order_by('?')[0]}
+
+            # Is it a category ?
             if tag.category:
-                cat_tags.append(obj)
+                if not tag.category in categories:
+                    # TODO: selet among all the available thumbnail and not
+                    # only the first tag in the list
+                    cats.append({'thumbnail': local_medias.order_by('?')[0],
+                                 'obj': tag.category})
+                    categories[tag.category] = len(cats)
             else:
                 non_cat_tags.append(obj)
             all_tags.append(obj)
@@ -85,7 +94,7 @@ def browse(request, path):
         return redirect(reverse('tags.details', args=[path]))
 
     return render_to_response('DataTag/tag/browse.html',
-                              {'tags': tags, 'cat_tags': cat_tags,
+                              {'tags': tags, 'cats': cats,
                                'non_cat_tags': non_cat_tags,
                                'all_tags': all_tags},
                               context_instance=RequestContext(request))

@@ -7,6 +7,8 @@
 <link href="{% get_static_prefix %}DataTag/css/lightbox-v2.7.1.css" rel="stylesheet" />
 {% endblock %}
 
+{% block nav-browse %}active{% endblock %}
+
 {% block breadcrumb %}
 <li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
 <li><a>{% trans "Tags" %}</a></li>

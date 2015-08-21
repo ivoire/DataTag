@@ -36,6 +36,7 @@ import tarfile
 
 
 def browse(request, path):
+    # TODO: pagination !
     # Parse the 'path' and build the query
     medias = Media.objects.all()
     query_string = ''
@@ -83,7 +84,8 @@ def browse(request, path):
                     # TODO: selet among all the available thumbnail and not
                     # only the first tag in the list
                     cats.append({'thumbnail': local_medias.order_by('?')[0],
-                                 'obj': tag.category})
+                                 'obj': tag.category,
+                                 'path': query_string})
                     categories[tag.category] = len(cats)
             else:
                 non_cat_tags.append(obj)

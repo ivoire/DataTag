@@ -66,8 +66,13 @@
         {% endif %}
         <div class="col-xs-3 col-md-3">
           <div class="thumbnail">
-            <a href="{% url 'categories.details' cat.obj.name %}"{% if cat.obj.description %} title="{{ cat.obj.description }}"{% endif %}><img src="{{ cat.thumbnail.get_absolute_url }}?size=small" /></a>
-            <div class="caption"><a href="{% url 'categories.details' cat.obj.name %}">{{ cat.obj.name|truncatechars:25 }}</a>
+            {% if cat.path %}
+            <a href="{% url 'categories.details' cat.obj.name cat.path %}"{% if cat.obj.description %} title="{{ cat.obj.description }}"{% endif %}><img src="{{ cat.thumbnail.get_absolute_url }}?size=small" /></a>
+            <div class="caption"><a href="{% url 'categories.details' cat.obj.name cat.path %}">{{ cat.obj.name|truncatechars:25 }}</a>
+            {% else %}
+            <a href="{% url 'categories.details.root' cat.obj.name %}"{% if cat.obj.description %} title="{{ cat.obj.description }}"{% endif %}><img src="{{ cat.thumbnail.get_absolute_url }}?size=small" /></a>
+            <div class="caption"><a href="{% url 'categories.details.root' cat.obj.name %}">{{ cat.obj.name|truncatechars:25 }}</a>
+            {% endif %}
             </div>
           </div>
         </div>

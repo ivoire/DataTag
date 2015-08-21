@@ -19,15 +19,41 @@
 
 from __future__ import unicode_literals
 
+from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
 from DataTag.models import Category, Media, Tag
 
 
-def details(request, name):
-    # TODO; add optional path
+def details(request, name, path):
     category = get_object_or_404(Category, name=name)
+
+    # Parse the 'path' and build the query
+    medias = Media.objects.all()
+    query_string = ''
+
+    # Skip too long requests
+    # TODO: should be a setting
+    path_elements = [p for p in path.split('/') if p]
+    if len(path_elements) > 20:
+        return HttpResponseBadRequest()
+
+    # Show only the selected tags
+    for tag_name in path_elements:
+        query_string = query_string + '/' + tag_name
+        tag = get_object_or_404(Tag, name=tag_name)
+        if not tag.is_visible_to(request.user):
+            # If the user is not logged-in, redirect to the login page
+            if not request.user.is_authenticated():
+                return redirect_to_login(request.get_full_path(),
+                                         settings.LOGIN_URL,
+                                         REDIRECT_FIELD_NAME)
+            else:
+                return HttpResponseForbidden()
+        medias = medias.filter(tags=tag)
 
     # Grab all tags with this category
     tags = []
@@ -35,12 +61,12 @@ def details(request, name):
         if not tag.is_visible_to(request.user):
             continue
 
-        medias = Media.objects.filter(tags=tag)
-        count = medias.count()
+        local_medias = medias.filter(tags=tag)
+        count = local_medias.count()
         if count:
             obj = {'obj': tag, 'count': count,
-                   'path': '/' + tag.name,
-                   'thumbnail': medias.order_by('?')[0]}
+                   'path': (query_string + '/' + tag.name),
+                   'thumbnail': local_medias.order_by('?')[0]}
             tags.append(obj)
 
     return render_to_response('DataTag/category/details.html',

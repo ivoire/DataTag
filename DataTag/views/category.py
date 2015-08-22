@@ -57,7 +57,7 @@ def details(request, name, path):
 
     # Grab all tags with this category
     tags = []
-    for tag in Tag.objects.filter(category=category):
+    for tag in Tag.objects.filter(category=category).order_by('-name'):
         if not tag.is_visible_to(request.user):
             continue
 

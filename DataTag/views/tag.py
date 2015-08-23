@@ -85,10 +85,13 @@ def browse(request, path):
                 non_cat_tags.append(obj)
 
     # If their is not tags to show, redirect to tag details
-    if not non_cat_tags and path:
+    if not non_cat_tags:
         if cat_tags:
-            return redirect(reverse('categories.browse') + "?path=%s" % path)
-        else:
+            if path:
+                return redirect(reverse('categories.browse') + "?path=%s" % path)
+            else:
+                return redirect(reverse('categories.browse'))
+        elif path:
             return redirect(reverse('tags.details', args=[path]))
 
 

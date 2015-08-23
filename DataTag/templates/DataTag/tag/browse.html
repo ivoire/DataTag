@@ -17,6 +17,7 @@
 
 {% block breadcrumb %}
 <li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+{% if tags %}
 <li><a href="{% url 'tags.browse.root' %}">{% trans "Browse" %}</a></li>
 {% for tag in tags %}
   {% if forloop.last %}
@@ -25,13 +26,16 @@
     <li><a href="{% url 'tags.browse' tag.path %}">{{ tag.obj.name }}</a></li>
   {% endif %}
 {% endfor %}
+{% else %}
+<li class="activate">{% trans "Browse" %}</li>
+{% endif %}
 {% endblock %}
 
 {% block body %}
 <div role="tabpanel">
   <ul role="tablist" class="nav nav-tabs">
     <li role="presentation"{% if not all_tags %} class="active"{% endif %}><a href=".">{% trans "Tags" %}</a></li>
-    <li role="presentation"><a href="{% url 'categories.browse' %}">{% trans "Categories" %}</a></li>
+    <li role="presentation"><a href="{% url 'categories.browse' %}{% if tags %}?path={% for tag in tags %}/{{ tag.obj.name }}{% endfor %}{% endif %}">{% trans "Categories" %}</a></li>
     <li role="presentation"{% if all_tags %} class="active"{% endif %}><a href=".?all=1">{% trans "All" %}</a></li>
   </ul>
 

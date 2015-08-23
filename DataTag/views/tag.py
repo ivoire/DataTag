@@ -42,6 +42,10 @@ def browse(request, path):
     query_string = ''
     tags = []
     non_cat_tags = []
+    cat_tags = []
+
+    # Do we have to show everything ?
+    all_tags = request.GET.get('all', False)
 
     # Skip too long requests
     # TODO: should be a setting
@@ -76,15 +80,22 @@ def browse(request, path):
                    'thumbnail': local_medias.order_by('?')[0]}
 
             # Is it a category ?
-            if not tag.category:
+            if tag.category:
+                cat_tags.append(obj)
+            if all_tags or not tag.category:
                 non_cat_tags.append(obj)
 
     # If their is not tags to show, redirect to tag details
     if not non_cat_tags and path:
-        return redirect(reverse('tags.details', args=[path]))
+        if cat_tags:
+            return redirect(reverse('categories.browse') + "?path=%s" % path)
+        else:
+            return redirect(reverse('tags.details', args=[path]))
+
 
     return render_to_response('DataTag/tag/browse.html',
-                              {'tags': tags, 'non_cat_tags': non_cat_tags},
+                              {'tags': tags, 'non_cat_tags': non_cat_tags,
+                               'all_tags': all_tags},
                               context_instance=RequestContext(request))
 
 

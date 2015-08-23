@@ -3,7 +3,7 @@
 
 {% block title %}{% with tags|last as last_tag %}{{ last_tag.path|default:"/" }}{% endwith %}{% endblock %}
 
-{% block nav-browse %}active{% endblock %}
+{% block nav-tags %}active{% endblock %}
 
 {% block style %}
   .caption {
@@ -30,13 +30,13 @@
 {% block body %}
 <div role="tabpanel">
   <ul role="tablist" class="nav nav-tabs">
-    <li role="presentation" class="active"><a href="#NonCat" aria-controls="NonCat" role="tab" data-toggle="tab">{% trans "Tags" %}</a></li>
+    <li role="presentation"{% if not all_tags %} class="active"{% endif %}><a href=".">{% trans "Tags" %}</a></li>
     <li role="presentation"><a href="{% url 'categories.browse' %}">{% trans "Categories" %}</a></li>
-    <li role="presentation"><a href=".?all=1">{% trans "All" %}</a></li>
+    <li role="presentation"{% if all_tags %} class="active"{% endif %}><a href=".?all=1">{% trans "All" %}</a></li>
   </ul>
 
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="NonCat">
+    <div role="tabpanel" class="tab-pane active">
       <div class="row">
         {% for tag in non_cat_tags %}
         {% if forloop.counter0|divisibleby:"4" and not forloop.first %}

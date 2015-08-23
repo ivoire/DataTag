@@ -31,7 +31,31 @@ import random
 
 
 def browse(request):
-    # TODO: handle query strings
+    # Handle query strings
+    path = request.GET.get('path', '')
+    medias = Media.objects.all()
+    if path:
+        # Parse the 'path' and build the query
+        query_string = ''
+        path_elements = [p for p in path.split('/') if p]
+        # TODO:should be a setting
+        if len(path_elements) > 20:
+            return HttpResponseBadRequest()
+
+        # Show only the selected tags
+        for tag_name in path_elements:
+            query_string = query_string + '/' + tag_name
+            tag = get_object_or_404(Tag, name=tag_name)
+            if not tag.is_visible_to(request.user):
+                # If the user is not logged-in, redirect to the login page
+                if not request.user.is_authenticated():
+                    return redirect_to_login(request.get_full_path(),
+                                             settings.LOGIN_URL,
+                                             REDIRECT_FIELD_NAME)
+                else:
+                    return HttpResponseForbidden()
+            medias = medias.filter(tags=tag)
+
     # List all available categories
     cats = Category.objects.all()
     categories = []
@@ -43,15 +67,16 @@ def browse(request):
         count = 0
         for tag in tags:
             if tag.is_visible_to(request.user):
-                available_tags.append(tag)
-                count += 1
+                if medias.filter(tags=tag).count():
+                    available_tags.append(tag)
+                    count += 1
         if not available_tags:
             continue
 
         # Get a random tag for the thumbnail
         tag = random.choice(available_tags)
         obj = {'obj': cat, 'count': count,
-               'path': '', 'thumbnail': Media.objects.filter(tags=tag).order_by('?')[0]}
+               'path': path, 'thumbnail': Media.objects.filter(tags=tag).order_by('?')[0]}
         categories.append(obj)
 
     return render_to_response('DataTag/category/browse.html',

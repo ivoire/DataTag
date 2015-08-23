@@ -19,6 +19,7 @@
 
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
@@ -38,8 +39,7 @@ def browse(request):
         # Parse the 'path' and build the query
         query_string = ''
         path_elements = [p for p in path.split('/') if p]
-        # TODO:should be a setting
-        if len(path_elements) > 20:
+        if len(path_elements) > settings.QUERY_MAX_LENGTH:
             return HttpResponseBadRequest()
 
         # Show only the selected tags

@@ -33,3 +33,6 @@ MESSAGE_TAGS = {
 
 # Choose between avconv and ffmpeg
 VIDEO_CMD = "ffmpeg"
+
+# The maximum depth of query string
+QUERY_MAX_LENGTH = 20

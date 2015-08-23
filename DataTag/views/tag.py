@@ -48,9 +48,8 @@ def browse(request, path):
     all_tags = request.GET.get('all', False)
 
     # Skip too long requests
-    # TODO: should be a setting
     path_elements = [p for p in path.split('/') if p]
-    if len(path_elements) > 20:
+    if len(path_elements) > settings.QUERY_MAX_LENGTH:
         return HttpResponseBadRequest()
 
     # Show only the selected tags
@@ -108,8 +107,7 @@ def details(request, path):
 
     # Skip too long requests
     tag_name_list = [p for p in path.split('/') if p]
-    # TODO: should be a setting
-    if len(tag_name_list) > 20:
+    if len(tag_name_list) > settings.QUERY_MAX_LENGTH:
         return HttpResponseBadRequest()
 
     # Check that all requested tags exists and are visible to the current user.

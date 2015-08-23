@@ -71,8 +71,7 @@ class Command(BaseCommand):
             tag = Tag(name=current_tag.name,
                       description=current_tag.description,
                       category=categories[current_tag.category],
-                      is_public=current_tag.public,
-                      is_root=current_tag.root)
+                      is_public=current_tag.public)
             tag.save()
 
             # Add groups

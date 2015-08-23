@@ -43,7 +43,7 @@ class MediaAdmin(admin.ModelAdmin):
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'group_list', 'is_public', 'is_root')
+    list_display = ('name', 'group_list', 'is_public')
     list_filter = ('groups',)
     filter_horizontal = ('groups',)
     ordering = ('name',)

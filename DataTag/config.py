@@ -36,13 +36,12 @@ class MediaConf(object):
 
 
 class TagConf(object):
-    def __init__(self, name, description, groups, category, public, root):
+    def __init__(self, name, description, groups, category, public):
         self.name = name
         self.description = description
         self.groups = groups
         self.category = category
         self.public = public
-        self.root = root
 
 
 class Configuration(object):
@@ -75,8 +74,7 @@ class Configuration(object):
                                                   tag.get('description', None),
                                                   set(tag.get('groups', [])),
                                                   tag.get('category', None),
-                                                  tag.get('public', False),
-                                                  tag.get('root', False))
+                                                  tag.get('public', False))
                 # Load categories
                 categories = y_conf.get('categories', {})
                 for category_name in categories:
@@ -135,8 +133,6 @@ class Configuration(object):
                 tags[tag.name]['category'] = tag.category
             if tag.public:
                 tags[tag.name]['public'] = True
-            if tag.root:
-                tags[tag.name]['root'] = True
 
         # Create the final dict
         to_dump = {}

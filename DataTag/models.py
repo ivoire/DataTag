@@ -91,7 +91,6 @@ class Tag(models.Model):
     groups = models.ManyToManyField(Group, blank=True)
     category = models.ForeignKey(Category, blank=True, null=True, default=None)
     is_public = models.BooleanField(default=False)
-    is_root = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s" % (self.name)

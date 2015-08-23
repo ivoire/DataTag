@@ -41,10 +41,7 @@ def browse(request, path):
     medias = Media.objects.all()
     query_string = ''
     tags = []
-    cats = []
-    categories = {}
     non_cat_tags = []
-    all_tags = []
 
     # Skip too long requests
     # TODO: should be a setting
@@ -79,26 +76,15 @@ def browse(request, path):
                    'thumbnail': local_medias.order_by('?')[0]}
 
             # Is it a category ?
-            if tag.category:
-                if not tag.category in categories:
-                    # TODO: selet among all the available thumbnail and not
-                    # only the first tag in the list
-                    cats.append({'thumbnail': local_medias.order_by('?')[0],
-                                 'obj': tag.category,
-                                 'path': query_string})
-                    categories[tag.category] = len(cats)
-            else:
+            if not tag.category:
                 non_cat_tags.append(obj)
-            all_tags.append(obj)
 
     # If their is not tags to show, redirect to tag details
-    if not all_tags and path:
+    if not non_cat_tags and path:
         return redirect(reverse('tags.details', args=[path]))
 
     return render_to_response('DataTag/tag/browse.html',
-                              {'tags': tags, 'cats': cats,
-                               'non_cat_tags': non_cat_tags,
-                               'all_tags': all_tags},
+                              {'tags': tags, 'non_cat_tags': non_cat_tags},
                               context_instance=RequestContext(request))
 
 

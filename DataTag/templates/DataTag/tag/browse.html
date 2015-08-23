@@ -31,8 +31,8 @@
 <div role="tabpanel">
   <ul role="tablist" class="nav nav-tabs">
     <li role="presentation" class="active"><a href="#NonCat" aria-controls="NonCat" role="tab" data-toggle="tab">{% trans "Tags" %}</a></li>
-    <li role="presentation"><a href="#Cat" aria-controls="Cat" role="tab" data-toggle="tab">{% trans "Categories" %}</a></li>
-    <li role="presentation"><a href="#AllTags" aria-controls="AllTags" role="tab" data-toggle="tab">{% trans "All" %}</a></li>
+    <li role="presentation"><a href="{% url 'categories.browse' %}">{% trans "Categories" %}</a></li>
+    <li role="presentation"><a href=".?all=1">{% trans "All" %}</a></li>
   </ul>
 
   <div class="tab-content">
@@ -45,51 +45,7 @@
         {% endif %}
         <div class="col-xs-3 col-md-3">
           <div class="thumbnail">
-            <a href="{% url 'tags.details' tag.path %}"{% if tag.obj.description %} title="{{ tag.obj.description }}"{% endif %}><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
-            <div class="caption"><a href="{% url 'tags.browse' tag.path %}">{{ tag.obj.name|truncatechars:25 }}</a>
-              <div class="pull-right">
-                <span class="badge">{{ tag.count }} <span class="glyphicon glyphicon-eye-open"></span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <div role="tabpanel" class="tab-pane" id="Cat">
-      <div class="row">
-        {% for cat in cats %}
-        {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
-      </div>
-      <div class="row">
-        {% endif %}
-        <div class="col-xs-3 col-md-3">
-          <div class="thumbnail">
-            {% if cat.path %}
-            <a href="{% url 'categories.details' cat.obj.name cat.path %}"{% if cat.obj.description %} title="{{ cat.obj.description }}"{% endif %}><img src="{{ cat.thumbnail.get_absolute_url }}?size=small" /></a>
-            <div class="caption"><a href="{% url 'categories.details' cat.obj.name cat.path %}">{{ cat.obj.name|truncatechars:25 }}</a>
-            {% else %}
-            <a href="{% url 'categories.details.root' cat.obj.name %}"{% if cat.obj.description %} title="{{ cat.obj.description }}"{% endif %}><img src="{{ cat.thumbnail.get_absolute_url }}?size=small" /></a>
-            <div class="caption"><a href="{% url 'categories.details.root' cat.obj.name %}">{{ cat.obj.name|truncatechars:25 }}</a>
-            {% endif %}
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <div role="tabpanel" class="tab-pane" id="AllTags">
-      <div class="row">
-        {% for tag in all_tags %}
-        {% if forloop.counter0|divisibleby:"4" and not forloop.first %}
-      </div>
-      <div class="row">
-        {% endif %}
-        <div class="col-xs-3 col-md-3">
-          <div class="thumbnail">
-            <a href="{% url 'tags.details' tag.path %}"{% if tag.obj.description %} title="{{ tag.obj.description }}"{% endif %}><img src="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
+            <a href="{% url 'tags.details' tag.path %}"{% if tag.obj.description %} title="{{ tag.obj.description }}"{% endif %}><img class="lazy" data-original="{{ tag.thumbnail.get_absolute_url }}?size=small" /></a>
             <div class="caption"><a href="{% url 'tags.browse' tag.path %}">{{ tag.obj.name|truncatechars:25 }}</a>
               <div class="pull-right">
                 <span class="badge">{{ tag.count }} <span class="glyphicon glyphicon-eye-open"></span></span>
@@ -102,4 +58,13 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="{% get_static_prefix %}DataTag/js/lazyload-v1.9.3.min.js"></script>
+<script>
+$(function() {
+    $("img.lazy").lazyload();
+})
+</script>
 {% endblock %}

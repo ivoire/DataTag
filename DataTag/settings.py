@@ -30,3 +30,6 @@ LOGIN_REDIRECT_URL = 'accounts.profile'
 MESSAGE_TAGS = {
     message_constants.ERROR: 'danger'
 }
+
+# Choose between avconv and ffmpeg
+VIDEO_CMD = "ffmpeg"

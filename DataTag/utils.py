@@ -105,7 +105,7 @@ def create_thumbnail(media, dest_path, size):
         tmp_dir = tempfile.mkdtemp('DataTag')
         tmp_path = os.path.join(tmp_dir, 'thumbnail.jpg')
         try:
-            subprocess.check_output(['ffmpeg', '-i', src_path,
+            subprocess.check_output([settings.VIDEO_CMD, '-i', src_path,
                                      '-vcodec', 'mjpeg',
                                      '-vframes', '1',
                                      '-an', '-f', 'rawvideo',

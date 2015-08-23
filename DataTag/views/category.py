@@ -57,7 +57,7 @@ def browse(request):
             medias = medias.filter(tags=tag)
 
     # List all available categories
-    cats = Category.objects.all()
+    cats = Category.objects.all().order_by('name')
     categories = []
 
     # For each category, filter for the current user
@@ -113,7 +113,7 @@ def details(request, name, path):
 
     # Grab all tags with this category
     tags = []
-    for tag in Tag.objects.filter(category=category).order_by('-name'):
+    for tag in Tag.objects.filter(category=category).order_by('name'):
         if not tag.is_visible_to(request.user):
             continue
 

@@ -54,6 +54,7 @@ urlpatterns = [
     url(r'^browse(?P<path>/.*)/$', v_tag.browse, name='tags.browse'),
 
     # Categories
+    url(r'^categories/$', v_category.browse, name='categories.browse'),
     url(r'^categories/(?P<name>[^/]+)/$', v_category.details, {'path': ''}, name='categories.details.root'),
     url(r'^categories/(?P<name>[^/]+)(?P<path>/.*)/$', v_category.details, name='categories.details'),
 ]

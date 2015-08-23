@@ -27,6 +27,37 @@ from django.template import RequestContext
 
 from DataTag.models import Category, Media, Tag
 
+import random
+
+
+def browse(request):
+    # TODO: handle query strings
+    # List all available categories
+    cats = Category.objects.all()
+    categories = []
+
+    # For each category, filter for the current user
+    for cat in cats:
+        tags = Tag.objects.filter(category=cat)
+        available_tags = []
+        count = 0
+        for tag in tags:
+            if tag.is_visible_to(request.user):
+                available_tags.append(tag)
+                count += 1
+        if not available_tags:
+            continue
+
+        # Get a random tag for the thumbnail
+        tag = random.choice(available_tags)
+        obj = {'obj': cat, 'count': count,
+               'path': '', 'thumbnail': Media.objects.filter(tags=tag).order_by('?')[0]}
+        categories.append(obj)
+
+    return render_to_response('DataTag/category/browse.html',
+                              {'categories': categories},
+                              context_instance=RequestContext(request))
+
 
 def details(request, name, path):
     category = get_object_or_404(Category, name=name)

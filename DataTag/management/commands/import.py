@@ -141,14 +141,20 @@ class Command(BaseCommand):
                     # Read EXIF data
                     date = timezone.now()
                     exif = load_exif(path)
+                    date_key = None
                     if 'DateTimeOriginal' in exif:
+                        date_key = 'DateTimeOriginal'
+                    elif 'MediaCreateDate' in exif:
+                        date_key = 'MediaCreateDate'
+
+                    if date_key is not None:
                         try:
-                            date = datetime.datetime.strptime(exif['DateTimeOriginal'],
+                            date = datetime.datetime.strptime(exif[date_key],
                                                               "%Y:%m:%d %H:%M:%S")
                             date = tz.localize(date)
                         except ValueError:
                             # TODO: handle date with timezone like 2014:05:09 19:32:29.92+02:00
-                            self.stdout.write(" => invalid date (%s)" % exif['DateTimeOriginal'])
+                            self.stdout.write(" => invalid date (%s)" % exif[date_key])
                     else:
                         self.stdout.write(" => no date found")
                     media = Media(path=path, date=date,

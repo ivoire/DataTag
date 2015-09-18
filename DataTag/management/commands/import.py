@@ -42,6 +42,7 @@ class Command(BaseCommand):
 
     def create_tag(self, tag_conf, root_conf, categories):
         tag = Tag(name=tag_conf.name, description=tag_conf.description,
+                  shortname=tag_conf.shortname,
                   category=categories[tag_conf.category],
                   is_public=tag_conf.public)
         tag.save()

@@ -36,9 +36,10 @@ class MediaConf(object):
 
 
 class TagConf(object):
-    def __init__(self, name, description, groups, category, public):
+    def __init__(self, name, description, shortname, groups, category, public):
         self.name = name
         self.description = description
+        self.shortname = shortname
         self.groups = groups
         self.category = category
         self.public = public
@@ -72,6 +73,7 @@ class Configuration(object):
                     tag = tags[tag_name]
                     self.tags[tag_name] = TagConf(tag_name,
                                                   tag.get('description', None),
+                                                  tag.get('shortname', None),
                                                   set(tag.get('groups', [])),
                                                   tag.get('category', None),
                                                   tag.get('public', False))
@@ -127,6 +129,8 @@ class Configuration(object):
 
             if tag.description:
                 tags[tag.name]['description'] = tag.description
+            if tag.shortname:
+                tags[tag.name]['shortname'] = tag.shortname
             if tag.groups:
                 tags[tag.name]['groups'] = list(tag.groups)
             if tag.category:

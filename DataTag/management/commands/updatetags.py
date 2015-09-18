@@ -70,6 +70,7 @@ class Command(BaseCommand):
             self.stdout.write(" - %s" % (tag_name))
             tag = Tag(name=current_tag.name,
                       description=current_tag.description,
+                      shortname=current_tag.shortname,
                       category=categories[current_tag.category],
                       is_public=current_tag.public)
             tag.save()

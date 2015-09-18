@@ -14,9 +14,9 @@
 <li><a>{% trans "Tags" %}</a></li>
 {% for tag in tags %}
   {% if forloop.last %}
-    <li class="activate">{{ tag.obj.name }}</li>
+    <li class="activate">{{ tag.obj.get_name }}</li>
   {% else %}
-    <li><a href="{% url 'tags.details' tag.path %}">{{ tag.obj.name }}</a></li>
+    <li><a href="{% url 'tags.details' tag.path %}">{{ tag.obj.get_name }}</a></li>
   {% endif %}
 {% endfor %}
 {% if medias|length < 200 %}

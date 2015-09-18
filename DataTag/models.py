@@ -87,6 +87,7 @@ class Category(models.Model):
 @python_2_unicode_compatible
 class Tag(models.Model):
     name = models.CharField(max_length=128, db_index=True, unique=True)
+    shortname = models.CharField(max_length=128, blank=True, null=True)
     description = models.CharField(max_length=1024, blank=True, null=True)
     groups = models.ManyToManyField(Group, blank=True)
     category = models.ForeignKey(Category, blank=True, null=True, default=None)
@@ -97,6 +98,9 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         return reverse('tags.details', args=['/' + self.name])
+
+    def get_name(self):
+        return self.shortname if self.shortname else self.name
 
     def is_visible_to(self, user):
         """

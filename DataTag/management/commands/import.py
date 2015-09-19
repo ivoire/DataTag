@@ -36,9 +36,7 @@ import pytz
 
 
 class Command(BaseCommand):
-    args = None
     help = 'Synchronize the file system with the database'
-    option_list = BaseCommand.option_list
 
     def create_tag(self, tag_conf, root_conf, categories):
         tag = Tag(name=tag_conf.name, description=tag_conf.description,
@@ -59,15 +57,24 @@ class Command(BaseCommand):
 
         return tag
 
+    def add_arguments(self, parser):
+        parser.add_argument('directories', nargs='*', type=str)
+
     @transaction.atomic
-    def handle(self, *args, **kwargs):
+    def handle(self, *args, **options):
         # Are we importing all medias or only a sub-directory
-        if len(args) > 0:
-            base_dirs = args
+        if len(options['directories']) > 0:
+            base_dirs = options['directories']
             root_conf = Configuration()
             root_conf.load(os.path.join(settings.MEDIA_ROOT, '.DataTag.yaml'))
             tags = {}
+
             # TODO: add missing categories
+            # Load the caterogies
+            categories = {None: None}
+            for category in Category.objects.all():
+                categories[category.name] = category
+
             self.stdout.write("Importing new tags if needed")
             for tag_name in root_conf.tags:
                 tag_conf = root_conf.tags[tag_name]

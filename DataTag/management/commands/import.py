@@ -127,8 +127,10 @@ class Command(BaseCommand):
                                           followlinks=True):
                 # Parse the local configuration file (if it exists)
                 local_conf = Configuration()
-                if '.DataTag.yaml' in files:
-                    local_conf.load(os.path.join(root, '.DataTag.yaml'))
+                if not '.DataTag.yaml' in files:
+                    self.stdout.write("Skipping %s (no configuration file)\n" % (root))
+                    continue
+                local_conf.load(os.path.join(root, '.DataTag.yaml'))
 
                 # Add all files, skipping hidden files and excluded ones
                 for filename in files:

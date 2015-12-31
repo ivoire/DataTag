@@ -25,7 +25,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, StreamingHttpResponse
-from django.shortcuts import get_object_or_404, redirect, render_to_response
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template import RequestContext
 
 from DataTag.models import Media, Tag
@@ -95,10 +95,9 @@ def browse(request, path):
             return redirect(reverse('tags.details', args=[path]))
 
 
-    return render_to_response('DataTag/tag/browse.html',
-                              {'tags': tags, 'non_cat_tags': non_cat_tags,
-                               'all_tags': all_tags},
-                              context_instance=RequestContext(request))
+    return render(request, 'DataTag/tag/browse.html',
+                  {'tags': tags, 'non_cat_tags': non_cat_tags,
+                   'all_tags': all_tags})
 
 
 # TODO: handle OR
@@ -160,6 +159,5 @@ def details(request, path):
         response['Content-Disposition'] = "attachment; filename=\"%s\"" % os.path.basename(path)
         return response
     else:
-        return render_to_response('DataTag/tag/details.html',
-                                  {'medias': medias, 'tags': tags},
-                                  context_instance=RequestContext(request))
+        return render(request, 'DataTag/tag/details.html',
+                      {'medias': medias, 'tags': tags})

@@ -23,7 +23,7 @@ from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 
 from DataTag.models import Category, Media, Tag
@@ -79,9 +79,8 @@ def browse(request):
                'path': path, 'thumbnail': Media.objects.filter(tags=tag).order_by('?')[0]}
         categories.append(obj)
 
-    return render_to_response('DataTag/category/browse.html',
-                              {'categories': categories},
-                              context_instance=RequestContext(request))
+    return render(request, 'DataTag/category/browse.html',
+                  {'categories': categories})
 
 
 def details(request, name, path):
@@ -125,7 +124,5 @@ def details(request, name, path):
                    'thumbnail': local_medias.order_by('?')[0]}
             tags.append(obj)
 
-    return render_to_response('DataTag/category/details.html',
-                              {'category': category,
-                               'tags': tags},
-                              context_instance=RequestContext(request))
+    return render(request, 'DataTag/category/details.html',
+                  {'category': category, 'tags': tags})

@@ -26,7 +26,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
@@ -125,15 +125,14 @@ def register(request):
         user_form = DTUserCreationForm(request.POST)
         if user_form.is_valid():
             user_form.save()
-            return render_to_response('DataTag/account/register_end.html', context_instance=RequestContext(request))
+            return render(request, 'DataTag/account/register_end.html')
         else:
             messages.error(request, _("Some information are missing or mistyped"))
     else:
         user_form = DTUserCreationForm()
 
-    return render_to_response('DataTag/account/register.html',
-                              {'user_form': user_form},
-                              context_instance=RequestContext(request))
+    return render(request, 'DataTag/account/register.html',
+                  {'user_form': user_form})
 
 
 @login_required
@@ -144,8 +143,7 @@ def password_change_done(request):
 
 @login_required
 def profile(request):
-    return render_to_response('DataTag/account/profile.html',
-                              context_instance=RequestContext(request))
+    return render(request, 'DataTag/account/profile.html')
 
 
 @login_required
@@ -160,6 +158,5 @@ def update(request):
     else:
         user_form = DTUserUpdateForm(instance=request.user)
 
-    return render_to_response('DataTag/account/update.html',
-                              {'user_form': user_form},
-                              context_instance=RequestContext(request))
+    return render(request, 'DataTag/account/update.html',
+                  {'user_form': user_form})

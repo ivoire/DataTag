@@ -19,11 +19,10 @@
 
 from __future__ import unicode_literals
 
-from django.core.servers.basehttp import FileWrapper
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.http import Http404, HttpResponseForbidden, StreamingHttpResponse
+from django.http import Http404, HttpResponseForbidden, FileResponse
 from django.shortcuts import get_object_or_404
 
 from DataTag.models import Media
@@ -64,11 +63,9 @@ def get_media(request, path):
         pathname = smallpath
 
     # Stream the file
-    wrapper = FileWrapper(open(pathname, 'rb'))
     # FIXME: this will be wrong for video thumbnails
     mime = mimetypes.guess_type(pathname)
-    response = StreamingHttpResponse(wrapper,
-                                     content_type=mime[0] if mime[0]
-                                     else 'text/plain')
+    response = FileResponse(open(pathname, 'rb'),
+                            content_type=mime[0] if mime[0] else 'text/plain')
     response['Content-Length'] = os.path.getsize(pathname)
     return response

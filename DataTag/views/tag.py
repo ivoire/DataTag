@@ -22,9 +22,8 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseForbidden, HttpResponseBadRequest, StreamingHttpResponse
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import RequestContext
 
@@ -151,9 +150,8 @@ def details(request, path):
                     tar.add(media.path, arcname="IMG_%04d%s" % (index, ext), recursive=False)
                     index += 1
         # Stream the file
-        wrapper = FileWrapper(open(path, 'rb'))
-        response = StreamingHttpResponse(wrapper,
-                                         content_type='application/x-tar')
+        response = FileResponse(open(path, 'rb'),
+                                content_type='application/x-tar')
         response['Content-Length'] = os.path.getsize(path)
         # TODO: will not work correctly if tag contains double quotes
         response['Content-Disposition'] = "attachment; filename=\"%s\"" % os.path.basename(path)

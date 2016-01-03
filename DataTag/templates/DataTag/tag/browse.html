@@ -35,7 +35,7 @@
 <div role="tabpanel">
   <ul role="tablist" class="nav nav-tabs">
     <li role="presentation"{% if not all_tags %} class="active"{% endif %}><a href=".">{% trans "Tags" %}</a></li>
-    <li role="presentation"><a href="{% url 'categories.browse' %}{% if tags %}?path={% for tag in tags %}/{{ tag.obj.get_name }}{% endfor %}{% endif %}">{% trans "Categories" %}</a></li>
+    <li role="presentation"><a href="{% url 'categories.browse' %}{% if tags %}?path={% for tag in tags %}/{{ tag.obj.name }}{% endfor %}{% endif %}">{% trans "Categories" %}</a></li>
     <li role="presentation"{% if all_tags %} class="active"{% endif %}><a href=".?all=1">{% trans "All" %}</a></li>
   </ul>
 

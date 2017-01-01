@@ -27,9 +27,7 @@ import os
 
 
 class Command(BaseCommand):
-    args = None
     help = 'Collect the tags from the sub-directories'
-    option_list = BaseCommand.option_list
 
     def handle(self, *args, **kwargs):
         # Find the new tags

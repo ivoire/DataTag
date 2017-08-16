@@ -22,8 +22,14 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.http import Http404, HttpResponseForbidden, FileResponse
+from django.http import (
+    FileResponse,
+    Http404,
+    HttpResponseForbidden,
+    HttpResponseNotModified
+)
 from django.shortcuts import get_object_or_404
+from django.utils.http import parse_http_date, http_date
 
 from DataTag.models import Media
 from DataTag.utils import create_thumbnail, mkdir
@@ -55,6 +61,7 @@ def get_media(request, path):
             size = (800, 600)
 
         smallpath = os.path.join(settings.CACHE_ROOT, size_str, path)
+        # TODO: check that the thumbnails is youger than the original image
         if not os.path.isfile(smallpath):
             # Create the destination directory and thumbnail
             mkdir(os.path.dirname(smallpath))
@@ -62,10 +69,24 @@ def get_media(request, path):
                 raise Http404
         pathname = smallpath
 
+    # Stat the file to grab metadata
+    stats = os.stat(pathname)
+
+    # Check if the client has the media in his cache
+    if_modified_since = request.META.get("HTTP_IF_MODIFIED_SINCE")
+    if if_modified_since:
+        if_modified_since = parse_http_date(if_modified_since)
+        if if_modified_since >= int(stats.st_mtime):
+            return HttpResponseNotModified()
+
     # Stream the file
     # FIXME: this will be wrong for video thumbnails
     mime = mimetypes.guess_type(pathname)
     response = FileResponse(open(pathname, 'rb'),
                             content_type=mime[0] if mime[0] else 'text/plain')
-    response['Content-Length'] = os.path.getsize(pathname)
+
+    # Set the headers
+    response['Content-Length'] = stats.st_size
+    response['Last-Modified'] = http_date(stats.st_mtime)
+
     return response
